@@ -15,7 +15,10 @@ import { Row } from "./layout/flex";
 
 function NavBar(props) {
 	return (
-		<Row center className="flex w-full items-center px-10 gap-[16px]">
+		<Row
+			center
+			className="flex w-full items-between flex-row px-10 gap-[16px]"
+		>
 			<div className="flex-initial">
 				<NavItem href="/" className="pr-[20px]">
 					<NXTImage
@@ -30,8 +33,10 @@ function NavBar(props) {
 					/>
 				</NavItem>
 			</div>
-			<Input className="" />
-			<div className="flex flex-row gap-x-4 items-center">
+
+			<Input className="w-3/6" />
+
+			<div className="flex-row gap-x-4 items-center hidden md:flex">
 				<Button
 					onClick={() => {
 						window.gtag("event", "claim-app", {
@@ -88,7 +93,7 @@ function ExpansionPanel(props) {
 						>
 							<path
 								d="M6 9.5L12 15.5L18 9.5"
-								stroke="#E2E1E6"
+								stroke="#525059"
 								strokeWidth="2"
 								strokeLinecap="round"
 								strokeLinejoin="round"
@@ -105,7 +110,7 @@ function ExpansionPanel(props) {
 						<Link
 							href={`/categories/?categories=${category.category}&subCategory=${e}`}
 						>
-							<p className="text-[16px] text-[#87868C] font-[500] py-[10px] hover:text-[#fff] capitalize">
+							<p className="text-[16px] text-[#87868C] font-[500] py-[10px] hover:text-text-color capitalize">
 								{e}
 							</p>
 						</Link>
@@ -326,7 +331,7 @@ function CategoryListSmall(props) {
 						setOpenKey(e.category);
 					}}
 				>
-					<summary className="cursor-pointer bg-[#212026] rounded-[32px] flex justify-between items-center py-[8px] px-[12px]">
+					<summary className="cursor-pointer bg-border-color rounded-[32px] flex justify-between items-center py-[8px] px-[12px]">
 						<Link href={`/categories/?categories=${e.category}`}>
 							<div className="capitalize whitespace-nowrap text-[14px] leading-[21px]">
 								{e.subCategory.includes(selected)
@@ -355,7 +360,7 @@ function CategoryListSmall(props) {
 								>
 									<path
 										d="M1 1L11 11M11 1L1 11"
-										stroke="#E2E1E6"
+										stroke="#525059"
 										stroke-width="1.5"
 										stroke-linecap="round"
 										stroke-linejoin="round"
@@ -372,7 +377,7 @@ function CategoryListSmall(props) {
 								>
 									<path
 										d="M6 9.5L12 15.5L18 9.5"
-										stroke="#E2E1E6"
+										stroke="#525059"
 										stroke-width="2"
 										stroke-linecap="round"
 										stroke-linejoin="round"
@@ -389,7 +394,7 @@ function CategoryListSmall(props) {
 								>
 									<path
 										d="M6 9.5L12 15.5L18 9.5"
-										stroke="#E2E1E6"
+										stroke="#525059"
 										stroke-width="2"
 										stroke-linecap="round"
 										strokeLinejoin="round"
