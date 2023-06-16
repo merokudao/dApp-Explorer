@@ -268,7 +268,10 @@ export function Footer(props) {
 			<div className="flex flex-row gap-x-2">
 				<button
 					onClick={() => {
-						window.open("https://twitter.com/meroku_org", "_blank");
+						window.open(
+							"https://twitter.com/merokustore",
+							"_blank"
+						);
 					}}
 				>
 					<svg
