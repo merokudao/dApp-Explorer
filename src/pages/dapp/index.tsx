@@ -42,30 +42,12 @@ const modalStyles = {
 	},
 };
 
-// const reviewModalStyle = {
-// 	overlay: {
-// 		background: "#D0D5DD75",
-// 	},
-// 	content: {
-// 		padding: "24px",
-// 		border: 0,
-// 		width: "512px",
-// 		height: "512px",
-// 		margin: "0 auto",
-// 		background: "#F2F4F7",
-// 		borderRadius: "16px",
-// 		/* Desktop styles */
-// 		top: "calc(50% - (30vw / 2))",
-// 		left: "calc(50% - (512px / 2))",
-// 	},
-// };
-
 const reviewModalStyle = {
 	overlay: {
 		background: "#D0D5DD75",
 	},
 	content: {
-		top: "80px", // header is 70px
+		top: "110px", // header is 70px
 		border: 0,
 		margin: "0 auto",
 		borderRadius: "16px",

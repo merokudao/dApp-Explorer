@@ -11,47 +11,90 @@ import { getPolygonCategoryList } from "../features/dapp/dapp_api";
 import { AppStrings } from "../pages/constants";
 import { FeaturedCard, SliderButton } from "./card";
 import { Button, Card } from "./index";
-import { Row } from "./layout/flex";
+import { Column, Row } from "./layout/flex";
 
 function NavBar(props) {
 	return (
-		<Row
-			center
-			className="flex w-full items-between flex-row px-10 gap-[16px]"
-		>
-			<div className="flex-initial">
-				<NavItem href="/" className="pr-[20px]">
-					<NXTImage
-						width={App.logo.width}
-						height={App.logo.height}
-						src={App.logo.src}
-						style={{
-							objectFit: "contain",
-							height: App.logo.height,
+		<>
+			{/* desktop only */}
+			<Row
+				center
+				className="w-full items-between flex-row px-10 hidden md:flex"
+			>
+				<div className="flex-initial">
+					<NavItem href="/" className="">
+						<NXTImage
+							width={App.logo.width}
+							height={App.logo.height}
+							src={App.logo.src}
+							style={{
+								objectFit: "contain",
+								height: App.logo.height,
+							}}
+							alt={`${App.name} Logo`}
+						/>
+					</NavItem>
+				</div>
+
+				<Input className="w-3/6" />
+
+				<div className="flex flex-row gap-x-4 items-center">
+					<Button
+						className="flex flex-grow"
+						onClick={() => {
+							window.gtag("event", "claim-app", {
+								location: "header",
+							});
 						}}
-						alt={`${App.name} Logo`}
-					/>
-				</NavItem>
-			</div>
-
-			<Input className="w-3/6" />
-
-			<div className="flex-row gap-x-4 items-center hidden md:flex">
-				<Button
-					className="flex flex-grow"
-					onClick={() => {
-						window.gtag("event", "claim-app", {
-							location: "header",
-						});
-					}}
+					>
+						<a target={"_blank"} href={"https://app.meroku.org"}>
+							Submit App
+						</a>
+					</Button>
+					<ConnectButton chainStatus="none" showBalance={false} />
+				</div>
+			</Row>
+			{/* mobile only */}
+			<Column className="flex md:hidden items-center w-full">
+				<Row
+					center
+					className="flex w-full items-between flex-row px-10 py-4 gap-[16px]"
 				>
-					<a target={"_blank"} href={"https://app.meroku.org"}>
-						Submit App
-					</a>
-				</Button>
-				<ConnectButton chainStatus="none" showBalance={false} />
-			</div>
-		</Row>
+					<div className="flex-initial">
+						<NavItem href="/" className="">
+							<NXTImage
+								width={95}
+								height={20}
+								src={App.logo.src}
+								style={{
+									objectFit: "contain",
+									height: 20,
+								}}
+								alt={`${App.name} Logo`}
+							/>
+						</NavItem>
+					</div>
+					<div>
+						<Button
+							className="flex flex-grow"
+							onClick={() => {
+								window.gtag("event", "claim-app", {
+									location: "header",
+								});
+							}}
+						>
+							<a
+								target={"_blank"}
+								href={"https://app.meroku.org"}
+							>
+								Submit App
+							</a>
+						</Button>
+					</div>
+				</Row>
+				<Input className="w-5/6" />
+			</Column>
+		</>
 	);
 }
 
@@ -620,10 +663,12 @@ export default function Layout(props) {
 	return (
 		<>
 			<div {...props}>
-				<div className="fixed flex h-[70px] w-full z-20 items-center top-[0px] bg-canvas-color">
+				<div className="fixed flex h-[100px] md:h-[70px] w-full z-20 items-center top-[0px] bg-canvas-color">
 					<NavBar />
 				</div>
-				<main className="relative top-[70px]">{props.children}</main>
+				<main className="relative top-[100px] md:top-[70px]">
+					{props.children}
+				</main>
 			</div>
 		</>
 	);
