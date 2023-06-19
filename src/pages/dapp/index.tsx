@@ -27,8 +27,7 @@ import { Dapp } from "../../features/dapp/models/dapp";
 import { Review } from "../../features/dapp/models/review";
 import { useSearchByIdQuery } from "../../features/search";
 import { AppStrings } from "../constants";
-
-Modal.setAppElement("#__next");
+import tw from "tailwind-styled-components";
 
 // dapp page, shows complete dapp info
 const modalStyles = {
@@ -43,19 +42,38 @@ const modalStyles = {
 	},
 };
 
+// const reviewModalStyle = {
+// 	overlay: {
+// 		background: "#D0D5DD75",
+// 	},
+// 	content: {
+// 		padding: "24px",
+// 		border: 0,
+// 		width: "512px",
+// 		height: "512px",
+// 		margin: "0 auto",
+// 		background: "#F2F4F7",
+// 		borderRadius: "16px",
+// 		/* Desktop styles */
+// 		top: "calc(50% - (30vw / 2))",
+// 		left: "calc(50% - (512px / 2))",
+// 	},
+// };
+
 const reviewModalStyle = {
 	overlay: {
 		background: "#D0D5DD75",
 	},
 	content: {
-		padding: "24px",
-		top: "calc(50% - (30vw / 2))",
+		top: "80px", // header is 70px
 		border: 0,
-		width: "512px",
-		height: "512px",
 		margin: "0 auto",
-		background: "#F2F4F7",
 		borderRadius: "16px",
+		backgroundColor: "transparent",
+		alignItems: "center",
+		justifyContent: "center",
+		display: "flex",
+		padding: 0,
 	},
 };
 
@@ -314,10 +332,12 @@ function ReviewDialog(props) {
 	}
 	return (
 		<>
-			<Column className={"gap-y-[32px] relative"}>
-				<h1 className="text-[20px] leading-[24px] font-[500]">
-					Add Review
-				</h1>
+			<Column
+				className={
+					"gap-y-[32px] relative flex w-full md:w-3/6 bg-light-color p-4 md:p-12 rounded-lg"
+				}
+			>
+				<h1 className="text-xl leading-md font-[500]">Add Review</h1>
 				<button
 					onClick={() => props.onRequestClose()}
 					className="absolute right-0 "
