@@ -38,6 +38,7 @@ function NavBar(props) {
 
 			<div className="flex-row gap-x-4 items-center hidden md:flex">
 				<Button
+					className="flex flex-grow"
 					onClick={() => {
 						window.gtag("event", "claim-app", {
 							location: "header",
