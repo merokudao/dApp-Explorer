@@ -27,7 +27,7 @@ import { Dapp } from "../../features/dapp/models/dapp";
 import { Review } from "../../features/dapp/models/review";
 import { useSearchByIdQuery } from "../../features/search";
 import { AppStrings } from "../constants";
-import tw from "tailwind-styled-components";
+import { NextSeo } from "next-seo";
 
 // dapp page, shows complete dapp info
 const modalStyles = {
@@ -612,6 +612,25 @@ function DappList(props) {
 
 	return (
 		<PageLayout>
+			<NextSeo
+				title={dApp.name}
+				description={dApp.description}
+				canonical={`${HOST_URL}${router.asPath}`}
+				openGraph={{
+					url: `${HOST_URL}${router.asPath}`,
+					title: dApp.name,
+					description: dApp.description,
+					images: [
+						{
+							url: dApp.images.logo,
+							width: 800,
+							height: 600,
+							alt: `${dApp.name} App Logo`,
+						},
+					],
+					site_name: `${dApp.name} | Meroku Protocol Explorer`,
+				}}
+			/>
 			<div className="flex flex-col">
 				<div className="mb-6 cursor-pointer" onClick={router.back}>
 					<svg
