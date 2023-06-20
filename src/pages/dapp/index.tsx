@@ -29,6 +29,7 @@ import { useSearchByIdQuery } from "../../features/search";
 import { AppStrings } from "../constants";
 import { NextSeo } from "next-seo";
 import { fetchAppById } from "../../fetch/fetchAppById";
+import Head from "next/head";
 
 // dapp page, shows complete dapp info
 const modalStyles = {
@@ -576,12 +577,15 @@ function DappList({ dApp, history }) {
 					],
 					site_name: `${dApp.name} | Meroku Protocol Explorer`,
 				}}
-				twitter={{
-					handle: "@merokustore",
-					site: "@merokuexplorer",
-					cardType: "summary_large_image",
-				}}
 			/>
+			<Head>
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta
+					property="twitter:title"
+					content={`${dApp.name} on Meroku Explorer`}
+				/>
+				<meta property="twitter:image" content={dApp.images.logo} />
+			</Head>
 			<div className="flex flex-col">
 				<div className="mb-6 cursor-pointer" onClick={router.back}>
 					<svg
