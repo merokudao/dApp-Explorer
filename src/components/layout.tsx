@@ -63,12 +63,12 @@ function NavBar(props) {
 					<div className="flex-initial">
 						<NavItem href="/" className="">
 							<NXTImage
-								width={95}
-								height={20}
+								width={195}
+								height={40}
 								src={App.logo.src}
 								style={{
 									objectFit: "contain",
-									height: 20,
+									height: 30,
 								}}
 								alt={`${App.name} Logo`}
 							/>

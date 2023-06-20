@@ -1,9 +1,9 @@
 export const App = {
 	name: "Meroku Explorer",
 	logo: {
-		height: 40,
-		width: 190,
-		src: "/meroku-full-logo.svg",
+		height: 50,
+		width: 237,
+		src: "/Logo_Explorer.svg",
 	},
 	menu: [
 		// {
