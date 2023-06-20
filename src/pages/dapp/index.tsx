@@ -509,6 +509,10 @@ function DappList(props) {
 		}
 	);
 
+	useEffect(() => {
+		console.log(data);
+	}, [data, isFetching]);
+
 	const { address } = useAccount();
 
 	const { ownedApps, isOwnedAppsLoading } = useGetDappByOwnerAddressQuery(
@@ -534,14 +538,14 @@ function DappList(props) {
 
 	const dApp: Dapp = data.data[0];
 
-	if (!dApp) {
+	if (!dApp.listDate) {
 		return (
 			<PageLayout>
-				<Column className="flex items-center w-full gap-y-4">
-					<p className="text-xl text-center">
+				<Column className="flex items-center w-full gap-y-4 justify-center h-screen">
+					<p className="text-md text-center">
 						{query.id} has not been pulished yet!
 					</p>
-					<p className="text-xl text-center">
+					<p className="text-md text-center">
 						If you are the owner, you can update the app on Meroku
 						Protocol Dapp & publish.
 					</p>
@@ -628,10 +632,10 @@ function DappList(props) {
 					</svg>
 					<span className="text-2xl">{AppStrings.allDapps}</span>
 				</div>
-				{dApp.images.banner && (
+				{dApp?.images.banner && (
 					<div className="z-0 relative top-[16px] lg:top-[48px] w-full h-[200px] lg:h-[400px]">
 						<Image
-							src={dApp.images.banner}
+							src={dApp?.images.banner}
 							placeholder={
 								"/assets/images/banner_placeholder.png"
 							}
