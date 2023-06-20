@@ -627,8 +627,19 @@ function DappList(props) {
 							height: 600,
 							alt: `${dApp.name} App Logo`,
 						},
+						{
+							url: dApp.images.banner,
+							width: 900,
+							height: 400,
+							alt: `${dApp.name} App Banner`,
+						},
 					],
 					site_name: `${dApp.name} | Meroku Protocol Explorer`,
+				}}
+				twitter={{
+					handle: "@merokustore",
+					site: "@merokuexplorer",
+					cardType: "summary_large_image",
 				}}
 			/>
 			<div className="flex flex-col">
