@@ -33,7 +33,7 @@ function ExpandAbleText(props) {
 	return (
 		<>
 			<Text
-				className="lg:text-text-color text-[14px] leading-[21px] font-[500]"
+				className="lg:text-text-color text-sm leading-md font-[500]"
 				maxLines={maxLines}
 			>
 				{text}

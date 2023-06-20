@@ -99,7 +99,7 @@ function DappDetailSection(props) {
 	return (
 		<section className="my-6">
 			{props.title && (
-				<h1 className="text-[24px] leading-[32px] font-[500] mb-4">
+				<h1 className="text-2xl leading-2xl font-[500] mb-4">
 					{props.title}
 				</h1>
 			)}
@@ -163,20 +163,37 @@ function DownloadButton(props) {
 
 //Claiming a dapp on meroku .
 function ClaimDappSection(props) {
-	const { onClick, address, onOpenConnectModal, minted } = props;
+	const { onClick, address, onOpenConnectModal, minted, dAppDetails } = props;
+
+	useEffect(() => {
+		console.log(dAppDetails);
+	}, [dAppDetails]);
+
+	if (dAppDetails.minted) {
+		return (
+			<Row className="items-start justify-between">
+				<p className="text-[#87868C]">
+					This app has been claimed by its developers.
+				</p>
+			</Row>
+		);
+	}
+
 	return (
 		<Row className="items-start justify-between">
 			<div className="w-8/12 flex flex-col gap-[16px]">
-				<h2 className="text-[24px] text-[500] leading-[32px]">
-					Claim this dApp
+				<h2 className="text-2xl text-[500] leading-2xl">
+					Claim this app
 				</h2>
-				<p className="text-[#87868C]">
-					This dApp has not been claimed by its developers. Click here
-					to open the Meroku platform and claim your .app domain
+				<p className="text-[#87868C] text-sm">
+					This app has not been claimed by its developers. Click here
+					to request claiming this whitelisted domain.
 				</p>
 				{/* {!address && onOpenConnectModal && <p onClick={onOpenConnectModal} className="text-[14px] leading-[24px] underline cursor-pointer">Do you own this dApp? Connect wallet to update</p>} */}
 			</div>
-			<ClaimButton onClick={onClick}>Claim</ClaimButton>
+			<ClaimButton onClick={onClick}>
+				Claim {dAppDetails.dappId}
+			</ClaimButton>
 		</Row>
 	);
 }
@@ -386,7 +403,7 @@ function AppRatingList(props) {
 	return (
 		<>
 			<Row className="justify-between items-center py-[24px]">
-				<h1 className="text-[24px] leading-[32px] font-[500]">
+				<h1 className="text-2xl leading-2xl font-[500]">
 					{AppStrings.reviewsTitle}
 				</h1>
 				<button
@@ -433,14 +450,14 @@ function AppRatingList(props) {
 			</Row>
 
 			<Row className="gap-x-[18px] ">
-				<p className="text-[24px] leading-[28px] font-[600]">
+				<p className="text-2xl leading-2xl font-[600]">
 					{Math.round((dApp?.metrics?.rating ?? 0) * 10) / 10}
 				</p>
 				<StarRating
 					rating={Math.round((dApp?.metrics?.rating ?? 0) * 10) / 10}
 				/>
 			</Row>
-			<small className="text-[14px] leading-[34px] font-[500] text-[#87868C]">
+			<small className="text-sm leading-md font-[500] text-[#87868C]">
 				{dApp?.metrics?.ratingsCount ?? 0} Ratings
 			</small>
 			<Row className="gap-x-[16px] items-stretch ">
@@ -574,6 +591,7 @@ function DappList(props) {
 		window.gtag("event", "claim-app", {
 			location: "dapp-page",
 		});
+
 		window.open(
 			"https://app.meroku.org/?search=" + String(dApp.name),
 			"_blank"
@@ -749,6 +767,7 @@ function DappList(props) {
 									address={address}
 									onClick={onClaimButtonClick}
 									onOpenConnectModal={openConnectModal}
+									dAppDetails={dApp}
 								/>
 							)
 						) : (
@@ -756,6 +775,7 @@ function DappList(props) {
 								address={address}
 								onClick={onClaimButtonClick}
 								onOpenConnectModal={openConnectModal}
+								dAppDetails={dApp}
 							/>
 						)}
 					</DappDetailSection>
