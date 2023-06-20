@@ -11,46 +11,90 @@ import { getPolygonCategoryList } from "../features/dapp/dapp_api";
 import { AppStrings } from "../pages/constants";
 import { FeaturedCard, SliderButton } from "./card";
 import { Button, Card } from "./index";
-import { Row } from "./layout/flex";
+import { Column, Row } from "./layout/flex";
 
 function NavBar(props) {
 	return (
-		<Row
-			center
-			className="flex w-full items-between flex-row px-10 gap-[16px]"
-		>
-			<div className="flex-initial">
-				<NavItem href="/" className="pr-[20px]">
-					<NXTImage
-						width={App.logo.width}
-						height={App.logo.height}
-						src={App.logo.src}
-						style={{
-							objectFit: "contain",
-							height: App.logo.height,
+		<>
+			{/* desktop only */}
+			<Row
+				center
+				className="w-full items-between flex-row px-10 hidden md:flex"
+			>
+				<div className="flex-initial">
+					<NavItem href="/" className="">
+						<NXTImage
+							width={App.logo.width}
+							height={App.logo.height}
+							src={App.logo.src}
+							style={{
+								objectFit: "contain",
+								height: App.logo.height,
+							}}
+							alt={`${App.name} Logo`}
+						/>
+					</NavItem>
+				</div>
+
+				<Input className="w-3/6" />
+
+				<div className="flex flex-row gap-x-4 items-center">
+					<Button
+						className="flex flex-grow"
+						onClick={() => {
+							window.gtag("event", "claim-app", {
+								location: "header",
+							});
 						}}
-						alt={`${App.name} Logo`}
-					/>
-				</NavItem>
-			</div>
-
-			<Input className="w-3/6" />
-
-			<div className="flex-row gap-x-4 items-center hidden md:flex">
-				<Button
-					onClick={() => {
-						window.gtag("event", "claim-app", {
-							location: "header",
-						});
-					}}
+					>
+						<a target={"_blank"} href={"https://app.meroku.org"}>
+							Submit App
+						</a>
+					</Button>
+					<ConnectButton chainStatus="none" showBalance={false} />
+				</div>
+			</Row>
+			{/* mobile only */}
+			<Column className="flex md:hidden items-center w-full">
+				<Row
+					center
+					className="flex w-full items-between flex-row px-10 py-4 gap-[16px]"
 				>
-					<a target={"_blank"} href={"https://app.meroku.org"}>
-						Submit App
-					</a>
-				</Button>
-				<ConnectButton chainStatus="none" showBalance={false} />
-			</div>
-		</Row>
+					<div className="flex-initial">
+						<NavItem href="/" className="">
+							<NXTImage
+								width={195}
+								height={40}
+								src={App.logo.src}
+								style={{
+									objectFit: "contain",
+									height: 30,
+								}}
+								alt={`${App.name} Logo`}
+							/>
+						</NavItem>
+					</div>
+					<div>
+						<Button
+							className="flex flex-grow"
+							onClick={() => {
+								window.gtag("event", "claim-app", {
+									location: "header",
+								});
+							}}
+						>
+							<a
+								target={"_blank"}
+								href={"https://app.meroku.org"}
+							>
+								Submit App
+							</a>
+						</Button>
+					</div>
+				</Row>
+				<Input className="w-5/6" />
+			</Column>
+		</>
 	);
 }
 
@@ -465,7 +509,7 @@ export function PageLayout(props) {
 								>
 									<path
 										d="M22 12.5C22 18.0228 17.5228 22.5 12 22.5M22 12.5C22 6.97715 17.5228 2.5 12 2.5M22 12.5H2M12 22.5C6.47715 22.5 2 18.0228 2 12.5M12 22.5C14.5013 19.7616 15.9228 16.208 16 12.5C15.9228 8.79203 14.5013 5.23835 12 2.5M12 22.5C9.49872 19.7616 8.07725 16.208 8 12.5C8.07725 8.79203 9.49872 5.23835 12 2.5M2 12.5C2 6.97715 6.47715 2.5 12 2.5"
-										stroke="#E2E1E6"
+										stroke="#101828"
 										stroke-width="2"
 										stroke-linecap="round"
 										stroke-linejoin="round"
@@ -619,10 +663,12 @@ export default function Layout(props) {
 	return (
 		<>
 			<div {...props}>
-				<div className="fixed flex h-[70px] w-full z-20 items-center top-[0px] bg-canvas-color">
+				<div className="fixed flex h-[100px] md:h-[70px] w-full z-20 items-center top-[0px] bg-canvas-color">
 					<NavBar />
 				</div>
-				<main className="relative top-[70px]">{props.children}</main>
+				<main className="relative top-[100px] md:top-[70px]">
+					{props.children}
+				</main>
 			</div>
 		</>
 	);

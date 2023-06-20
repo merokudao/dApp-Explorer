@@ -27,8 +27,7 @@ import { Dapp } from "../../features/dapp/models/dapp";
 import { Review } from "../../features/dapp/models/review";
 import { useSearchByIdQuery } from "../../features/search";
 import { AppStrings } from "../constants";
-
-Modal.setAppElement("#__next");
+import { NextSeo } from "next-seo";
 
 // dapp page, shows complete dapp info
 const modalStyles = {
@@ -48,14 +47,15 @@ const reviewModalStyle = {
 		background: "#D0D5DD75",
 	},
 	content: {
-		padding: "24px",
-		top: "calc(50% - (30vw / 2))",
+		top: "110px", // header is 70px
 		border: 0,
-		width: "512px",
-		height: "512px",
 		margin: "0 auto",
-		background: "#F2F4F7",
 		borderRadius: "16px",
+		backgroundColor: "transparent",
+		alignItems: "center",
+		justifyContent: "center",
+		display: "flex",
+		padding: 0,
 	},
 };
 
@@ -99,7 +99,7 @@ function DappDetailSection(props) {
 	return (
 		<section className="my-6">
 			{props.title && (
-				<h1 className="text-[24px] leading-[32px] font-[500] mb-4">
+				<h1 className="text-2xl leading-2xl font-[500] mb-4">
 					{props.title}
 				</h1>
 			)}
@@ -163,20 +163,37 @@ function DownloadButton(props) {
 
 //Claiming a dapp on meroku .
 function ClaimDappSection(props) {
-	const { onClick, address, onOpenConnectModal, minted } = props;
+	const { onClick, address, onOpenConnectModal, minted, dAppDetails } = props;
+
+	useEffect(() => {
+		console.log(dAppDetails);
+	}, [dAppDetails]);
+
+	if (dAppDetails.minted) {
+		return (
+			<Row className="items-start justify-between">
+				<p className="text-[#87868C]">
+					This app has been claimed by its developers.
+				</p>
+			</Row>
+		);
+	}
+
 	return (
 		<Row className="items-start justify-between">
 			<div className="w-8/12 flex flex-col gap-[16px]">
-				<h2 className="text-[24px] text-[500] leading-[32px]">
-					Claim this dApp
+				<h2 className="text-2xl text-[500] leading-2xl">
+					Claim this app
 				</h2>
-				<p className="text-[#87868C]">
-					This dApp has not been claimed by its developers. Click here
-					to open the Meroku platform and claim your .app domain
+				<p className="text-[#87868C] text-sm">
+					This app has not been claimed by its developers. Click here
+					to request claiming this whitelisted domain.
 				</p>
 				{/* {!address && onOpenConnectModal && <p onClick={onOpenConnectModal} className="text-[14px] leading-[24px] underline cursor-pointer">Do you own this dApp? Connect wallet to update</p>} */}
 			</div>
-			<ClaimButton onClick={onClick}>Claim</ClaimButton>
+			<ClaimButton onClick={onClick}>
+				Claim {dAppDetails.dappId}
+			</ClaimButton>
 		</Row>
 	);
 }
@@ -259,6 +276,7 @@ export function StarRating(props) {
 // review is only possible when user has either opened or downloaded dapp via store after connecting wallet.
 function ReviewDialog(props) {
 	const [postReview, result, isLoading, isFetching] = usePostReviewMutation();
+	const router = useRouter();
 	const [errors, setErrors] = useState();
 	const { address } = useAccount();
 	const [review, setReview] = useState<Review>({
@@ -272,6 +290,7 @@ function ReviewDialog(props) {
 			.unwrap()
 			.then((_) => {
 				props.onRequestClose();
+				router.reload();
 			})
 			.catch((err) => {
 				console.log(err);
@@ -314,10 +333,12 @@ function ReviewDialog(props) {
 	}
 	return (
 		<>
-			<Column className={"gap-y-[32px] relative"}>
-				<h1 className="text-[20px] leading-[24px] font-[500]">
-					Add Review
-				</h1>
+			<Column
+				className={
+					"gap-y-[32px] relative flex w-full md:w-3/6 bg-light-color p-4 md:p-12 rounded-lg"
+				}
+			>
+				<h1 className="text-xl leading-md font-[500]">Add Review</h1>
 				<button
 					onClick={() => props.onRequestClose()}
 					className="absolute right-0 "
@@ -384,7 +405,7 @@ function AppRatingList(props) {
 	return (
 		<>
 			<Row className="justify-between items-center py-[24px]">
-				<h1 className="text-[24px] leading-[32px] font-[500]">
+				<h1 className="text-2xl leading-2xl font-[500]">
 					{AppStrings.reviewsTitle}
 				</h1>
 				<button
@@ -431,14 +452,14 @@ function AppRatingList(props) {
 			</Row>
 
 			<Row className="gap-x-[18px] ">
-				<p className="text-[24px] leading-[28px] font-[600]">
+				<p className="text-2xl leading-2xl font-[600]">
 					{Math.round((dApp?.metrics?.rating ?? 0) * 10) / 10}
 				</p>
 				<StarRating
 					rating={Math.round((dApp?.metrics?.rating ?? 0) * 10) / 10}
 				/>
 			</Row>
-			<small className="text-[14px] leading-[34px] font-[500] text-[#87868C]">
+			<small className="text-sm leading-md font-[500] text-[#87868C]">
 				{dApp?.metrics?.ratingsCount ?? 0} Ratings
 			</small>
 			<Row className="gap-x-[16px] items-stretch ">
@@ -488,6 +509,10 @@ function DappList(props) {
 		}
 	);
 
+	useEffect(() => {
+		console.log(data);
+	}, [data, isFetching]);
+
 	const { address } = useAccount();
 
 	const { ownedApps, isOwnedAppsLoading } = useGetDappByOwnerAddressQuery(
@@ -513,14 +538,14 @@ function DappList(props) {
 
 	const dApp: Dapp = data.data[0];
 
-	if (!dApp) {
+	if (!dApp.listDate) {
 		return (
 			<PageLayout>
-				<Column className="flex items-center w-full gap-y-4">
-					<p className="text-xl text-center">
+				<Column className="flex items-center w-full gap-y-4 justify-center h-screen">
+					<p className="text-md text-center">
 						{query.id} has not been pulished yet!
 					</p>
-					<p className="text-xl text-center">
+					<p className="text-md text-center">
 						If you are the owner, you can update the app on Meroku
 						Protocol Dapp & publish.
 					</p>
@@ -572,6 +597,7 @@ function DappList(props) {
 		window.gtag("event", "claim-app", {
 			location: "dapp-page",
 		});
+
 		window.open(
 			"https://app.meroku.org/?search=" + String(dApp.name),
 			"_blank"
@@ -586,6 +612,36 @@ function DappList(props) {
 
 	return (
 		<PageLayout>
+			<NextSeo
+				title={dApp.name}
+				description={dApp.description}
+				canonical={`${HOST_URL}${router.asPath}`}
+				openGraph={{
+					url: `${HOST_URL}${router.asPath}`,
+					title: dApp.name,
+					description: dApp.description,
+					images: [
+						{
+							url: dApp.images.logo,
+							width: 800,
+							height: 600,
+							alt: `${dApp.name} App Logo`,
+						},
+						{
+							url: dApp.images.banner,
+							width: 900,
+							height: 400,
+							alt: `${dApp.name} App Banner`,
+						},
+					],
+					site_name: `${dApp.name} | Meroku Protocol Explorer`,
+				}}
+				twitter={{
+					handle: "@merokustore",
+					site: "@merokuexplorer",
+					cardType: "summary_large_image",
+				}}
+			/>
 			<div className="flex flex-col">
 				<div className="mb-6 cursor-pointer" onClick={router.back}>
 					<svg
@@ -598,7 +654,7 @@ function DappList(props) {
 					>
 						<path
 							d="M12 19.5001L5 12.5001M5 12.5001L12 5.50012M5 12.5001H19"
-							stroke="#E2E1E6"
+							stroke="#101828"
 							strokeWidth="2"
 							strokeLinecap="round"
 							strokeLinejoin="round"
@@ -606,10 +662,10 @@ function DappList(props) {
 					</svg>
 					<span className="text-2xl">{AppStrings.allDapps}</span>
 				</div>
-				{dApp.images.banner && (
+				{dApp?.images.banner && (
 					<div className="z-0 relative top-[16px] lg:top-[48px] w-full h-[200px] lg:h-[400px]">
 						<Image
-							src={dApp.images.banner}
+							src={dApp?.images.banner}
 							placeholder={
 								"/assets/images/banner_placeholder.png"
 							}
@@ -747,6 +803,7 @@ function DappList(props) {
 									address={address}
 									onClick={onClaimButtonClick}
 									onOpenConnectModal={openConnectModal}
+									dAppDetails={dApp}
 								/>
 							)
 						) : (
@@ -754,6 +811,7 @@ function DappList(props) {
 								address={address}
 								onClick={onClaimButtonClick}
 								onOpenConnectModal={openConnectModal}
+								dAppDetails={dApp}
 							/>
 						)}
 					</DappDetailSection>

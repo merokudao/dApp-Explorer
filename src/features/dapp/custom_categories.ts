@@ -74,7 +74,7 @@ export const categories = {
 			subCategory: ["DAO", "DAO Investing", "DAO Tooling", "DAO - Misc"],
 		},
 		{
-			category: "DeFi",
+			category: "Finance",
 			subCategory: [
 				"Stablecoins",
 				"Decentralized Exchanges",

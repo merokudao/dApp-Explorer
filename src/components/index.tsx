@@ -33,7 +33,7 @@ function ExpandAbleText(props) {
 	return (
 		<>
 			<Text
-				className="lg:text-text-color text-[14px] leading-[21px] font-[500]"
+				className="lg:text-text-color text-sm leading-md font-[500]"
 				maxLines={maxLines}
 			>
 				{text}
@@ -53,12 +53,12 @@ function Button(props) {
 		<Elm
 			{...props}
 			className={
-				"py-[15px] px-[24px] rounded-[10px] bg-gradient-to-b from-[#2678FD] to-[#0C62E4] font-[600] text-[16px] hover:from-[#1258BA] hover:to-[#144785] hover:text-black disabled:cursor-not-allowed shadow-md shadow-[#2678FD]/30" +
+				"flex px-8 py-4 rounded-lg bg-gradient-to-b from-[#2678FD] to-[#0C62E4] text-lg hover:from-[#1258BA] hover:to-[#144785] hover:text-black disabled:cursor-not-allowed shadow-md shadow-[#2678FD]/30" +
 				" " +
 				props.className
 			}
 		>
-			<div className="text-[12px] font-[500] leading-[15.6px] flex items-center justify-center text-[#FCFCFD]">
+			<div className="text-xs font-[500] leading-md flex items-center justify-center text-light-color">
 				{" "}
 				{props.children}
 			</div>
@@ -73,9 +73,9 @@ function ClaimButton(props) {
 	return (
 		<button
 			{...props}
-			className="py-[15px] px-[24px] rounded-[10px] bg-gradient-to-b from-[#2678FD] to-[#0C62E4] font-[600] text-[16px] hover:from-[#1258BA] hover:to-[#144785] hover:text-black disabled:cursor-not-allowed shadow-md shadow-[#2678FD]/30"
+			className="flex px-8 py-4 rounded-lg bg-gradient-to-b from-[#2678FD] to-[#0C62E4] font-[600] text-lg hover:from-[#1258BA] hover:to-[#144785] hover:text-black disabled:cursor-not-allowed shadow-md shadow-[#2678FD]/30"
 		>
-			<span className="text-[14px] font-[500] leading-[18px] text-[#FCFCFD]">
+			<span className="text-xs font-[500] leading-md text-[#FCFCFD]">
 				{props.children}
 			</span>
 		</button>
