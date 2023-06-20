@@ -576,11 +576,11 @@ function DappList({ dApp, history }) {
 					],
 					site_name: `${dApp.name} | Meroku Protocol Explorer`,
 				}}
-				twitter={{
-					handle: "@merokustore",
-					site: "@merokuexplorer",
-					cardType: "summary_large_image",
-				}}
+				// twitter={{
+				// 	handle: "@merokustore",
+				// 	site: "@merokuexplorer",
+				// 	cardType: "summary_large_image",
+				// }}
 			/>
 			<div className="flex flex-col">
 				<div className="mb-6 cursor-pointer" onClick={router.back}>
