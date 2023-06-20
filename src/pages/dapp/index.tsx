@@ -498,49 +498,6 @@ function DappList({ dApp, history }) {
 		}
 	}, [isClaimOpen, isReviewModalOpen]);
 
-	// console.log(dApp);
-
-	// const { data, isFetching, isLoading } = useSearchByIdQuery(
-	// 	query.id,
-	// 	{
-	// 		page: 1,
-	// 		limit: 1,
-	// 		chainId: app.chainId,
-	// 	},
-	// 	{
-	// 		refetchOnMountOrArgChange: false,
-	// 	}
-	// );
-
-	// useEffect(() => {
-	// 	console.log(data);
-	// }, [data, isFetching]);
-
-	// const { address } = useAccount();
-
-	// const { ownedApps, isOwnedAppsLoading } = useGetDappByOwnerAddressQuery(
-	// 	address,
-	// 	{
-	// 		skip:
-	// 			address === undefined &&
-	// 			(isLoading || isFetching || !data[0]?.minted),
-	// 	}
-	// );
-
-	// if (isLoading || isFetching)
-	// 	return (
-	// 		<PageLayout>
-	// 			<div className="shimmer w-full h-[400px] mb-[16px] rounded-lg" />
-	// 			<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
-	// 			<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
-	// 			<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
-	// 		</PageLayout>
-	// 	);
-
-	// if (!data) return <PageLayout>Missing post!</PageLayout>;
-
-	// const dApp: Dapp = data.data[0];
-
 	if (!dApp.listDate) {
 		return (
 			<PageLayout>
@@ -568,11 +525,6 @@ function DappList({ dApp, history }) {
 		);
 	}
 
-	// const history = JSON.parse(localStorage.getItem("dApps") ?? "{}");
-	// localStorage.setItem(
-	// 	"dApps",
-	// 	JSON.stringify(Object.assign({}, history, { [dApp.dappId]: dApp }))
-	// );
 	const args = new URLSearchParams();
 	let viewLink;
 	let downloadLink;
@@ -587,26 +539,6 @@ function DappList({ dApp, history }) {
 		setDApps(Object.assign({}, dApps, { [app.dappId]: app }));
 	}
 
-	// if (address) {
-	// 	args.set("userAddress", address);
-	// 	viewLink = `${BASE_URL}/o/view/${dApp.dappId}?${args.toString()}`;
-	// 	downloadLink = `${BASE_URL}/o/download/${
-	// 		dApp.dappId
-	// 	}?${args.toString()}`;
-	// } else {
-	// 	viewLink = dApp.appUrl;
-	// }
-
-	// const isOwner = isOwnedAppsLoading
-	// 	? false
-	// 	: ownedApps?.data?.includes(dApp.dappId) || false;
-
-	// const getIframeSrc = (): string => {
-	// 	return isOwner
-	// 		? "https://app.meroku.org/update"
-	// 		: "https://app.meroku.org/app";
-	// };
-
 	const onClaimButtonClick = () => {
 		window.gtag("event", "claim-app", {
 			location: "dapp-page",
@@ -616,12 +548,6 @@ function DappList({ dApp, history }) {
 			"https://app.meroku.org/?search=" + String(dApp.name),
 			"_blank"
 		);
-		// if (!!address) {
-		// 	setClaimOpen(true);
-		// 	return;
-		// } else if (openConnectModal) {
-		// 	openConnectModal();
-		// }
 	};
 
 	return (
