@@ -28,6 +28,7 @@ import { Review } from "../../features/dapp/models/review";
 import { useSearchByIdQuery } from "../../features/search";
 import { AppStrings } from "../constants";
 import { NextSeo } from "next-seo";
+import { fetchAppById } from "../../fetch/fetchAppById";
 
 // dapp page, shows complete dapp info
 const modalStyles = {
@@ -163,7 +164,7 @@ function DownloadButton(props) {
 
 //Claiming a dapp on meroku .
 function ClaimDappSection(props) {
-	const { onClick, address, onOpenConnectModal, minted, dAppDetails } = props;
+	const { onClick, onOpenConnectModal, minted, dAppDetails } = props;
 
 	useEffect(() => {
 		console.log(dAppDetails);
@@ -482,7 +483,7 @@ function AppRatingList(props) {
 	);
 }
 
-function DappList(props) {
+function DappList({ dApp, history }) {
 	const router = useRouter();
 	const [isClaimOpen, setClaimOpen] = useState<boolean>(false);
 	const { openConnectModal } = useConnectModal();
@@ -497,46 +498,48 @@ function DappList(props) {
 		}
 	}, [isClaimOpen, isReviewModalOpen]);
 
-	const { data, isFetching, isLoading } = useSearchByIdQuery(
-		query.id,
-		{
-			page: 1,
-			limit: 1,
-			chainId: app.chainId,
-		},
-		{
-			refetchOnMountOrArgChange: false,
-		}
-	);
+	// console.log(dApp);
 
-	useEffect(() => {
-		console.log(data);
-	}, [data, isFetching]);
+	// const { data, isFetching, isLoading } = useSearchByIdQuery(
+	// 	query.id,
+	// 	{
+	// 		page: 1,
+	// 		limit: 1,
+	// 		chainId: app.chainId,
+	// 	},
+	// 	{
+	// 		refetchOnMountOrArgChange: false,
+	// 	}
+	// );
 
-	const { address } = useAccount();
+	// useEffect(() => {
+	// 	console.log(data);
+	// }, [data, isFetching]);
 
-	const { ownedApps, isOwnedAppsLoading } = useGetDappByOwnerAddressQuery(
-		address,
-		{
-			skip:
-				address === undefined &&
-				(isLoading || isFetching || !data[0]?.minted),
-		}
-	);
+	// const { address } = useAccount();
 
-	if (isLoading || isFetching)
-		return (
-			<PageLayout>
-				<div className="shimmer w-full h-[400px] mb-[16px] rounded-lg" />
-				<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
-				<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
-				<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
-			</PageLayout>
-		);
+	// const { ownedApps, isOwnedAppsLoading } = useGetDappByOwnerAddressQuery(
+	// 	address,
+	// 	{
+	// 		skip:
+	// 			address === undefined &&
+	// 			(isLoading || isFetching || !data[0]?.minted),
+	// 	}
+	// );
 
-	if (!data) return <PageLayout>Missing post!</PageLayout>;
+	// if (isLoading || isFetching)
+	// 	return (
+	// 		<PageLayout>
+	// 			<div className="shimmer w-full h-[400px] mb-[16px] rounded-lg" />
+	// 			<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
+	// 			<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
+	// 			<div className="shimmer w-full h-[100px] mb-[16px] rounded-lg" />
+	// 		</PageLayout>
+	// 	);
 
-	const dApp: Dapp = data.data[0];
+	// if (!data) return <PageLayout>Missing post!</PageLayout>;
+
+	// const dApp: Dapp = data.data[0];
 
 	if (!dApp.listDate) {
 		return (
@@ -565,33 +568,44 @@ function DappList(props) {
 		);
 	}
 
-	const history = JSON.parse(localStorage.getItem("dApps") ?? "{}");
-	localStorage.setItem(
-		"dApps",
-		JSON.stringify(Object.assign({}, history, { [dApp.dappId]: dApp }))
-	);
+	// const history = JSON.parse(localStorage.getItem("dApps") ?? "{}");
+	// localStorage.setItem(
+	// 	"dApps",
+	// 	JSON.stringify(Object.assign({}, history, { [dApp.dappId]: dApp }))
+	// );
 	const args = new URLSearchParams();
 	let viewLink;
 	let downloadLink;
-	if (address) {
-		args.set("userAddress", address);
-		viewLink = `${BASE_URL}/o/view/${dApp.dappId}?${args.toString()}`;
-		downloadLink = `${BASE_URL}/o/download/${
-			dApp.dappId
-		}?${args.toString()}`;
-	} else {
-		viewLink = dApp.appUrl;
+
+	const [dApps, setDApps] = useState(history);
+
+	useEffect(() => {
+		localStorage.setItem("dApps", JSON.stringify(dApps));
+	}, [dApps]);
+
+	function handleAddToHistory() {
+		setDApps(Object.assign({}, dApps, { [app.dappId]: app }));
 	}
 
-	const isOwner = isOwnedAppsLoading
-		? false
-		: ownedApps?.data?.includes(dApp.dappId) || false;
+	// if (address) {
+	// 	args.set("userAddress", address);
+	// 	viewLink = `${BASE_URL}/o/view/${dApp.dappId}?${args.toString()}`;
+	// 	downloadLink = `${BASE_URL}/o/download/${
+	// 		dApp.dappId
+	// 	}?${args.toString()}`;
+	// } else {
+	// 	viewLink = dApp.appUrl;
+	// }
 
-	const getIframeSrc = (): string => {
-		return isOwner
-			? "https://app.meroku.org/update"
-			: "https://app.meroku.org/app";
-	};
+	// const isOwner = isOwnedAppsLoading
+	// 	? false
+	// 	: ownedApps?.data?.includes(dApp.dappId) || false;
+
+	// const getIframeSrc = (): string => {
+	// 	return isOwner
+	// 		? "https://app.meroku.org/update"
+	// 		: "https://app.meroku.org/app";
+	// };
 
 	const onClaimButtonClick = () => {
 		window.gtag("event", "claim-app", {
@@ -783,7 +797,7 @@ function DappList(props) {
                             <UpdateDappSection onClick={onClaimButtonClick} /> :
                             <ClaimDappSection address={address} onClick={onClaimButtonClick} onOpenConnectModal={openConnectModal} minted={dApp.minted} />} */}
 
-						{!(address == undefined) ? (
+						{/* {!(address == undefined) ? (
 							isOwner ? (
 								<UpdateDappSection
 									onClick={onClaimButtonClick}
@@ -806,14 +820,14 @@ function DappList(props) {
 									dAppDetails={dApp}
 								/>
 							)
-						) : (
-							<ClaimDappSection
-								address={address}
-								onClick={onClaimButtonClick}
-								onOpenConnectModal={openConnectModal}
-								dAppDetails={dApp}
-							/>
-						)}
+						) : ( */}
+						<ClaimDappSection
+							// address={address}
+							onClick={onClaimButtonClick}
+							onOpenConnectModal={openConnectModal}
+							dAppDetails={dApp}
+						/>
+						{/* )} */}
 					</DappDetailSection>
 				</section>
 			</div>
@@ -852,12 +866,12 @@ function DappList(props) {
 								</svg>
 							</button>
 						</div>
-						<div className="bg-canvas-color">
+						{/* <div className="bg-canvas-color">
 							<iframe
 								className="w-full rounded-[16px] min-h-screen"
 								src={getIframeSrc()}
 							/>
-						</div>
+						</div> */}
 					</div>
 				</Modal>
 			)}
@@ -866,3 +880,21 @@ function DappList(props) {
 }
 
 export default DappList;
+
+export async function getServerSideProps({ query, req, res }) {
+	const { id } = query;
+	const response = await fetchAppById(id);
+
+	const dApp = response[0];
+
+	const history = JSON.parse(req.cookies.dApps ?? "{}");
+	const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
+	res.setHeader("Set-Cookie", `dApps=${JSON.stringify(updatedHistory)}`);
+
+	return {
+		props: {
+			dApp,
+			history: updatedHistory,
+		},
+	};
+}
