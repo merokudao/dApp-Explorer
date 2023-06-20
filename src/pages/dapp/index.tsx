@@ -276,6 +276,7 @@ export function StarRating(props) {
 // review is only possible when user has either opened or downloaded dapp via store after connecting wallet.
 function ReviewDialog(props) {
 	const [postReview, result, isLoading, isFetching] = usePostReviewMutation();
+	const router = useRouter();
 	const [errors, setErrors] = useState();
 	const { address } = useAccount();
 	const [review, setReview] = useState<Review>({
@@ -289,6 +290,7 @@ function ReviewDialog(props) {
 			.unwrap()
 			.then((_) => {
 				props.onRequestClose();
+				router.reload();
 			})
 			.catch((err) => {
 				console.log(err);
@@ -618,7 +620,7 @@ function DappList(props) {
 					>
 						<path
 							d="M12 19.5001L5 12.5001M5 12.5001L12 5.50012M5 12.5001H19"
-							stroke="#E2E1E6"
+							stroke="#101828"
 							strokeWidth="2"
 							strokeLinecap="round"
 							strokeLinejoin="round"
