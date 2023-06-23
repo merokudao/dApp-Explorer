@@ -6,7 +6,7 @@ import { publicProvider } from "wagmi/providers/public";
 // exports all the necessary data for wallet connect.
 export const { connectors } = getDefaultWallets({
 	appName: "Meroku Explorer",
-	projectId: WC_PROJECT_ID ?? "",
+	projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID || "",
 	chains: chains,
 });
 export const { publicClient } = configureChains(chains, [publicProvider()]);
