@@ -819,7 +819,12 @@ export async function getServerSideProps({ query, req, res }) {
 
 	const history = JSON.parse(req.cookies.dApps ?? "{}");
 	const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
-	res.setHeader("Set-Cookie", `dApps=${JSON.stringify(updatedHistory)}`);
+
+	const cookieValue = JSON.stringify(updatedHistory);
+	const encodedCookieValue = encodeURIComponent(cookieValue);
+	res.setHeader("Set-Cookie", `dApps=${encodedCookieValue}`);
+
+	// res.setHeader("Set-Cookie", `dApps=${JSON.stringify(updatedHistory)}`);
 
 	return {
 		props: {
