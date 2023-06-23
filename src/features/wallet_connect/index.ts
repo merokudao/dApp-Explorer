@@ -1,6 +1,5 @@
 import { configureChains, createConfig } from "wagmi";
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
-import { WC_PROJECT_ID } from "../../api/constants";
 import { chains } from "./config";
 import { publicProvider } from "wagmi/providers/public";
 // exports all the necessary data for wallet connect.
