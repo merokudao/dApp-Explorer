@@ -6,6 +6,15 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile
+            args:
+                - NEXT_PUBLIC_WC_PROJECT_ID=${NEXT_PUBLIC_WC_PROJECT_ID}
+                - API_HOST=${API_HOST}
+                - NEXT_PUBLIC_API_HOST=${NEXT_PUBLIC_API_HOST}
+                - NEXT_PUBLIC_MEROKU_API_KEY=${NEXT_PUBLIC_MEROKU_API_KEY}
+                - API_PATH=${API_PATH}
+                - API_VERSION=${API_VERSION}
+                - NEXT_PUBLIC_HOST_PATH=${NEXT_PUBLIC_HOST_PATH}
+        env_file: .env
         restart: always
         ports:
             - 3000:3000
