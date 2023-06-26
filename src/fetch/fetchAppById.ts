@@ -9,8 +9,13 @@ export async function fetchAppById(id: string) {
 			apiKey: process.env.NEXT_PUBLIC_MEROKU_API_KEY || "",
 		},
 	});
-	const response = await res.json();
-	const apps = response.data;
+	// const response = await res.json();
+	// const apps = response.data;
 
-	return apps;
+	const buffer = await res.arrayBuffer(); // Get the response as an ArrayBuffer
+	const decoder = new TextDecoder("utf-8"); // Create a TextDecoder with the correct encoding
+	const decodedData = decoder.decode(buffer); // Decode the response using the TextDecoder
+	const data = JSON.parse(decodedData); // Parse the decoded response as JSON
+
+	return data;
 }
