@@ -723,34 +723,6 @@ function DappList({ dApp }) {
 						</>
 					)}
 					<DappDetailSection>
-						{/* {!!address && isOwner ?
-                            <UpdateDappSection onClick={onClaimButtonClick} /> :
-                            <ClaimDappSection address={address} onClick={onClaimButtonClick} onOpenConnectModal={openConnectModal} minted={dApp.minted} />} */}
-
-						{/* {!(address == undefined) ? (
-							isOwner ? (
-								<UpdateDappSection
-									onClick={onClaimButtonClick}
-								/>
-							) : !(dApp.minted == undefined || !dApp.minted) ? (
-								openConnectModal && (
-									<p
-										onClick={openConnectModal}
-										className="text-[14px] leading-[24px] underline cursor-pointer"
-									>
-										Do you own this dApp? Connect wallet to
-										update
-									</p>
-								)
-							) : (
-								<ClaimDappSection
-									address={address}
-									onClick={onClaimButtonClick}
-									onOpenConnectModal={openConnectModal}
-									dAppDetails={dApp}
-								/>
-							)
-						) : ( */}
 						<ClaimDappSection
 							// address={address}
 							onClick={onClaimButtonClick}
@@ -796,12 +768,6 @@ function DappList({ dApp }) {
 								</svg>
 							</button>
 						</div>
-						{/* <div className="bg-canvas-color">
-							<iframe
-								className="w-full rounded-[16px] min-h-screen"
-								src={getIframeSrc()}
-							/>
-						</div> */}
 					</div>
 				</Modal>
 			)}
@@ -816,8 +782,6 @@ export async function getServerSideProps({ query, req, res }) {
 	const response = await fetchAppById(id);
 
 	const dApp = response[0];
-
-	console.log(dApp);
 
 	// const history = JSON.parse(req.cookies.dApps ?? "{}");
 	// const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
