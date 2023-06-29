@@ -484,11 +484,11 @@ function AppRatingList(props) {
 	);
 }
 
-function DappList({ dApp, history }) {
+function DappList({ dApp }) {
 	const router = useRouter();
 	const [isClaimOpen, setClaimOpen] = useState<boolean>(false);
 	const { openConnectModal } = useConnectModal();
-	const app = useSelector(getApp);
+	// const app = useSelector(getApp);
 	const { query } = useRouter();
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
 	useEffect(() => {
@@ -526,19 +526,19 @@ function DappList({ dApp, history }) {
 		);
 	}
 
-	const args = new URLSearchParams();
+	// const args = new URLSearchParams();
 	let viewLink;
 	let downloadLink;
 
-	const [dApps, setDApps] = useState(history);
+	// const [dApps, setDApps] = useState(history);
 
-	useEffect(() => {
-		localStorage.setItem("dApps", JSON.stringify(dApps));
-	}, [dApps]);
+	// useEffect(() => {
+	// 	localStorage.setItem("dApps", JSON.stringify(dApps));
+	// }, [dApps]);
 
-	function handleAddToHistory() {
-		setDApps(Object.assign({}, dApps, { [app.dappId]: app }));
-	}
+	// function handleAddToHistory() {
+	// 	setDApps(Object.assign({}, dApps, { [app.dappId]: app }));
+	// }
 
 	const onClaimButtonClick = () => {
 		window.gtag("event", "claim-app", {
@@ -817,19 +817,21 @@ export async function getServerSideProps({ query, req, res }) {
 
 	const dApp = response[0];
 
-	const history = JSON.parse(req.cookies.dApps ?? "{}");
-	const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
+	console.log(dApp);
 
-	const cookieValue = JSON.stringify(updatedHistory);
-	const encodedCookieValue = encodeURIComponent(cookieValue);
-	res.setHeader("Set-Cookie", `dApps=${encodedCookieValue}`);
+	// const history = JSON.parse(req.cookies.dApps ?? "{}");
+	// const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
+
+	// const cookieValue = JSON.stringify(updatedHistory);
+	// const encodedCookieValue = encodeURIComponent(cookieValue);
+	// res.setHeader("Set-Cookie", `dApps=${encodedCookieValue}`);
 
 	// res.setHeader("Set-Cookie", `dApps=${JSON.stringify(updatedHistory)}`);
 
 	return {
 		props: {
 			dApp,
-			history: updatedHistory,
+			// history: updatedHistory,
 		},
 	};
 }
