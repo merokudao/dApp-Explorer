@@ -129,7 +129,7 @@ function DownloadButton(props) {
 	});
 	const currentColor =
 		downloadAvailable && (href != undefined || data != undefined)
-			? "#fff"
+			? "#525059"
 			: "#D0D5DD";
 	return (
 		<a
@@ -484,11 +484,12 @@ function AppRatingList(props) {
 	);
 }
 
-function DappList({ dApp }) {
+function DappList({ dApp, history }) {
 	const router = useRouter();
 	const [isClaimOpen, setClaimOpen] = useState<boolean>(false);
 	const { openConnectModal } = useConnectModal();
-	// const app = useSelector(getApp);
+	const app = useSelector(getApp);
+	const { address } = useAccount();
 	const { query } = useRouter();
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
 	useEffect(() => {
@@ -526,19 +527,29 @@ function DappList({ dApp }) {
 		);
 	}
 
-	// const args = new URLSearchParams();
+	const args = new URLSearchParams();
 	let viewLink;
 	let downloadLink;
 
-	// const [dApps, setDApps] = useState(history);
+	if (address) {
+		args.set("userAddress", address);
+		viewLink = `${BASE_URL}/o/view/${dApp.dappId}?${args.toString()}`;
+		downloadLink = `${BASE_URL}/o/download/${
+			dApp.dappId
+		}?${args.toString()}`;
+	} else {
+		viewLink = dApp.appUrl;
+	}
 
-	// useEffect(() => {
-	// 	localStorage.setItem("dApps", JSON.stringify(dApps));
-	// }, [dApps]);
+	const [dApps, setDApps] = useState(history);
 
-	// function handleAddToHistory() {
-	// 	setDApps(Object.assign({}, dApps, { [app.dappId]: app }));
-	// }
+	useEffect(() => {
+		localStorage.setItem("dApps", JSON.stringify(dApps));
+	}, [dApps]);
+
+	function handleAddToHistory() {
+		setDApps(Object.assign({}, dApps, { [app.dappId]: app }));
+	}
 
 	const onClaimButtonClick = () => {
 		window.gtag("event", "claim-app", {
@@ -783,19 +794,19 @@ export async function getServerSideProps({ query, req, res }) {
 
 	const dApp = response[0];
 
-	// const history = JSON.parse(req.cookies.dApps ?? "{}");
-	// const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
+	const history = JSON.parse(req.cookies.dApps ?? "{}");
+	const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
 
-	// const cookieValue = JSON.stringify(updatedHistory);
-	// const encodedCookieValue = encodeURIComponent(cookieValue);
-	// res.setHeader("Set-Cookie", `dApps=${encodedCookieValue}`);
+	const cookieValue = JSON.stringify(updatedHistory);
+	const encodedCookieValue = encodeURIComponent(cookieValue);
+	res.setHeader("Set-Cookie", `dApps=${encodedCookieValue}`);
 
 	// res.setHeader("Set-Cookie", `dApps=${JSON.stringify(updatedHistory)}`);
 
 	return {
 		props: {
 			dApp,
-			// history: updatedHistory,
+			history: updatedHistory,
 		},
 	};
 }
