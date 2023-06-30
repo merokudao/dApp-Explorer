@@ -20,6 +20,7 @@ export function Tag(props: { children: ReactNode }) {
 }
 // List of apps
 export function AppList(props) {
+	console.log("applist", props.data);
 	const router = useRouter();
 
 	return (

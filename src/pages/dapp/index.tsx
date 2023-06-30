@@ -129,7 +129,7 @@ function DownloadButton(props) {
 	});
 	const currentColor =
 		downloadAvailable && (href != undefined || data != undefined)
-			? "#fff"
+			? "#525059"
 			: "#D0D5DD";
 	return (
 		<a
@@ -489,6 +489,7 @@ function DappList({ dApp, history }) {
 	const [isClaimOpen, setClaimOpen] = useState<boolean>(false);
 	const { openConnectModal } = useConnectModal();
 	const app = useSelector(getApp);
+	const { address } = useAccount();
 	const { query } = useRouter();
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
 	useEffect(() => {
@@ -529,6 +530,16 @@ function DappList({ dApp, history }) {
 	const args = new URLSearchParams();
 	let viewLink;
 	let downloadLink;
+
+	if (address) {
+		args.set("userAddress", address);
+		viewLink = `${BASE_URL}/o/view/${dApp.dappId}?${args.toString()}`;
+		downloadLink = `${BASE_URL}/o/download/${
+			dApp.dappId
+		}?${args.toString()}`;
+	} else {
+		viewLink = dApp.appUrl;
+	}
 
 	const [dApps, setDApps] = useState(history);
 
@@ -723,34 +734,6 @@ function DappList({ dApp, history }) {
 						</>
 					)}
 					<DappDetailSection>
-						{/* {!!address && isOwner ?
-                            <UpdateDappSection onClick={onClaimButtonClick} /> :
-                            <ClaimDappSection address={address} onClick={onClaimButtonClick} onOpenConnectModal={openConnectModal} minted={dApp.minted} />} */}
-
-						{/* {!(address == undefined) ? (
-							isOwner ? (
-								<UpdateDappSection
-									onClick={onClaimButtonClick}
-								/>
-							) : !(dApp.minted == undefined || !dApp.minted) ? (
-								openConnectModal && (
-									<p
-										onClick={openConnectModal}
-										className="text-[14px] leading-[24px] underline cursor-pointer"
-									>
-										Do you own this dApp? Connect wallet to
-										update
-									</p>
-								)
-							) : (
-								<ClaimDappSection
-									address={address}
-									onClick={onClaimButtonClick}
-									onOpenConnectModal={openConnectModal}
-									dAppDetails={dApp}
-								/>
-							)
-						) : ( */}
 						<ClaimDappSection
 							// address={address}
 							onClick={onClaimButtonClick}
@@ -796,12 +779,6 @@ function DappList({ dApp, history }) {
 								</svg>
 							</button>
 						</div>
-						{/* <div className="bg-canvas-color">
-							<iframe
-								className="w-full rounded-[16px] min-h-screen"
-								src={getIframeSrc()}
-							/>
-						</div> */}
 					</div>
 				</Modal>
 			)}
