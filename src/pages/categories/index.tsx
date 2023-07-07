@@ -43,7 +43,7 @@ function CategoriesList(props) {
 			subCategory: categoryMapped.subCategory,
 			page,
 			limit,
-			chainId: app.chainId,
+			chainId: "",
 		},
 		{
 			refetchOnMountOrArgChange: false,
@@ -53,7 +53,7 @@ function CategoriesList(props) {
 	// since now data is being merge in RTK itself
 	useEffect(() => {
 		if (data) {
-			console.log("data", data);
+			// console.log("data", data);
 			setItems([...data?.response]);
 		}
 	}, [data]);
