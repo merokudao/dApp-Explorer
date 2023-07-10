@@ -53,7 +53,7 @@ export function AppList(props) {
 									classNames="text-[16px] leading-[21px] text-[#87868C] font-[400] line-clamp-3"
 									maxLines={3}
 								>
-									{app.description}
+									{app.description.substring(0, 200)}
 								</Text>
 								{/* </Link> */}
 							</Card>
