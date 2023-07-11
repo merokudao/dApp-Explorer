@@ -2,7 +2,7 @@
 
 import { ApiEndpoints } from "../api/constants";
 
-const MEROKU_BASE_URL = process.env.API_HOST;
+const MEROKU_BASE_URL = process.env.NEXT_PUBLIC_API_HOST;
 
 export async function fetchSearchResults(searchWord: string) {
 	const res = await fetch(
