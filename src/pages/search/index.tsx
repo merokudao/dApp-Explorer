@@ -17,22 +17,22 @@ export default function SearchPage() {
 		}
 	}, [router.query.search]);
 
-	let child;
-	child = <AppList data={items}></AppList>;
-
-	let emptyLoading;
-	emptyLoading = (
-		<Column className="flex items-center w-full gap-y-4 justify-center h-screen">
-			<p className="text-md text-center">loading results ...</p>
-		</Column>
-	);
+	if (items.length === 0) {
+		return (
+			<PageLayout>
+				<Column className="flex items-center w-full gap-y-4 justify-center h-screen">
+					<p className="text-md text-center">Loading results ...</p>
+				</Column>
+			</PageLayout>
+		);
+	}
 
 	return (
 		<PageLayout>
 			<h1 className="text-[24px] leading-[32px] lg:text-4xl mb-8 capitalize">
 				search results for {router.query.search}
 			</h1>
-			<>{items.length > 0 ? child : emptyLoading}</>
+			<AppList data={items}></AppList>
 		</PageLayout>
 	);
 }
