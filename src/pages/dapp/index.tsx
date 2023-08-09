@@ -167,10 +167,6 @@ function DownloadButton(props) {
 function ClaimDappSection(props) {
 	const { onClick, onOpenConnectModal, minted, dAppDetails } = props;
 
-	useEffect(() => {
-		console.log(dAppDetails);
-	}, [dAppDetails]);
-
 	if (dAppDetails.minted) {
 		return (
 			<Row className="items-start justify-between">
@@ -533,12 +529,14 @@ function DappList({ dApp, history }) {
 
 	if (address) {
 		args.set("userAddress", address);
-		viewLink = `${BASE_URL}/o/view/${dApp.dappId}?${args.toString()}`;
+		viewLink = `${BASE_URL}/o/view/${
+			dApp.dappId
+		}?userId=known_meroku_explorer?${args.toString()}`;
 		downloadLink = `${BASE_URL}/o/download/${
 			dApp.dappId
 		}?${args.toString()}`;
 	} else {
-		viewLink = dApp.appUrl;
+		viewLink = `${BASE_URL}/o/view/${dApp.dappId}?userId=anonymous_meroku_explorer`;
 	}
 
 	const [dApps, setDApps] = useState(history);
