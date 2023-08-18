@@ -401,7 +401,7 @@ function AppRatingList(props) {
 	const { address } = useAccount();
 	if (isLoading || isFetching) return null;
 	return (
-		<div className="flex flex-col gap-y-6">
+		<div className="flex flex-col relative gap-y-6">
 			<Row className="justify-between items-center">
 				<h1 className="text-2xl leading-2xl font-[500]">
 					{AppStrings.reviewsTitle}
@@ -475,6 +475,13 @@ function AppRatingList(props) {
 					</Link>
 				</Row>
 			)}
+			<div className="absolute inset-0">
+				<div className="backdrop-filter backdrop-blur-sm absolute w-full h-full flex items-center justify-center ">
+					<p className="font-medium text-xs md:text-base flex ml-4 text-blue-700">
+						ratings & reviews coming soon!
+					</p>
+				</div>
+			</div>
 			<Divider />
 		</div>
 	);
