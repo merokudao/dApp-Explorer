@@ -671,6 +671,7 @@ function DappList({ dApp, history }) {
 							fill={true}
 							alt="DApp Banner"
 							className="aspect-video	rounded-lg object-cover	"
+							unoptimized={true}
 						/>
 					</div>
 				)}
@@ -687,6 +688,7 @@ function DappList({ dApp, history }) {
 									src={dApp.images.logo}
 									className="rounded-lg w-[64px] lg:w-[64px] "
 									alt=""
+									unoptimized={true}
 								/>
 							</div>
 							<div className="flex-auto  pt-4">
