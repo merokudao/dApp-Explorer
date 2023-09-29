@@ -6,7 +6,7 @@ const Sitemap = () => {
 };
 
 export const getServerSideProps = async ({ res }: { res: NextApiResponse }) => {
-  const baseUrl = process.env.NEXT_PUBLIC_HOSTED_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_HOST_PATH || "http://localhost:3000";
 
   const response = await fetch('https://api.meroku.store/api/v1/dapp/search?limit=50');
   const dappData = await response?.json();
