@@ -14,7 +14,6 @@ export default function HistoryPage(props) {
 		if (text) {
 			setHistory(JSON.parse(text));
 		}
-		console.log(history);
 	}, []);
 	return (
 		<PageLayout>
