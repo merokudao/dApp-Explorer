@@ -99,7 +99,7 @@ function SocialButton(props) {
 
 function DappDetailSection(props) {
 	return (
-		<section className="my-6">
+		<section className="">
 			{props.title && (
 				<h1 className="text-2xl leading-2xl font-[500] mb-4">
 					{props.title}
@@ -401,8 +401,8 @@ function AppRatingList(props) {
 	const { address } = useAccount();
 	if (isLoading || isFetching) return null;
 	return (
-		<>
-			<Row className="justify-between items-center py-[24px]">
+		<div className="flex flex-col relative gap-y-6">
+			<Row className="justify-between items-center">
 				<h1 className="text-2xl leading-2xl font-[500]">
 					{AppStrings.reviewsTitle}
 				</h1>
@@ -475,8 +475,54 @@ function AppRatingList(props) {
 					</Link>
 				</Row>
 			)}
+			<div className="absolute inset-0">
+				<div className="backdrop-filter backdrop-blur-sm absolute w-full h-full flex items-center justify-center ">
+					<p className="font-medium text-xs md:text-base flex ml-4 text-blue-700">
+						ratings & reviews coming soon!
+					</p>
+				</div>
+			</div>
 			<Divider />
-		</>
+		</div>
+	);
+}
+
+function AppMetrics(props) {
+	const { appMetrics } = props;
+
+	const MetricItem = (props) => {
+		const { value, label, symbol } = props;
+		return (
+			<div className="flex flex-col items-center justify-cente">
+				<p className="text-xl leading-xs font-[500] flex flex-row justify-center items-center">
+					{value}
+					<p className="text-base">{symbol}</p>
+				</p>
+				<small className="text-sm leading-md font-[500] text-[#87868C]">
+					{label}
+				</small>
+			</div>
+		);
+	};
+
+	return (
+		<div className="grid grid-cols-3 gap-4 divide-x">
+			<MetricItem
+				value={appMetrics?.visits ?? 0}
+				label="Visits"
+				symbol=""
+			/>
+			<MetricItem
+				value={appMetrics?.downloads ?? 0}
+				label="Downloads"
+				symbol=""
+			/>
+			<MetricItem
+				value={appMetrics?.rating ?? 0}
+				label="Total Rating"
+				symbol="★"
+			/>
+		</div>
 	);
 }
 
@@ -592,7 +638,7 @@ function DappList({ dApp, history }) {
 				/>
 				<meta property="twitter:image" content={dApp.images.logo} />
 			</Head>
-			<div className="flex flex-col">
+			<div className="flex flex-col gap-y-2 pb-24">
 				<div className="mb-6 cursor-pointer" onClick={router.back}>
 					<svg
 						className="inline-block mr-2"
@@ -622,10 +668,11 @@ function DappList({ dApp, history }) {
 							fill={true}
 							alt="DApp Banner"
 							className="aspect-video	rounded-lg object-cover	"
+							unoptimized={true}
 						/>
 					</div>
 				)}
-				<section>
+				<section className="flex flex-col gap-y-12">
 					<header className="z-10 flex flex-col md:flex-row md:justify-between md:items-end gap-4 px-[8px] lg:px-[16px]">
 						<div className="flex-auto flex flex-row items-end  gap-[16px] pl-[8px] md:pl-0">
 							<div className="relative bg-canvas-color flex-initial rounded-2xl w-[74px relative] w-[64px] h-[64px] lg:w-[132px] lg:h-[132px]">
@@ -638,6 +685,7 @@ function DappList({ dApp, history }) {
 									src={dApp.images.logo}
 									className="rounded-lg w-[64px] lg:w-[64px] "
 									alt=""
+									unoptimized={true}
 								/>
 							</div>
 							<div className="flex-auto  pt-4">
@@ -701,6 +749,11 @@ function DappList({ dApp, history }) {
 							<DownloadButton href={downloadLink} dApp={dApp} />
 						</div>
 					</header>
+					{dApp.metrics ? (
+						<AppMetrics appMetrics={dApp.metrics} />
+					) : (
+						<div />
+					)}
 					<DappDetailSection title={AppStrings.about}>
 						<ExpandAbleText maxCharacters={320} maxLines={3}>
 							{dApp.description}
