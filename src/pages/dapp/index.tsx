@@ -539,15 +539,12 @@ function DappList({ dApp, history }) {
 		viewLink = `${BASE_URL}/o/view/${dApp.dappId}?userId=anonymous_meroku_explorer`;
 	}
 
-	const [dApps, setDApps] = useState(history);
-
 	useEffect(() => {
-		localStorage.setItem("dApps", JSON.stringify(dApps));
-	}, [dApps]);
-
-	function handleAddToHistory() {
-		setDApps(Object.assign({}, dApps, { [app.dappId]: app }));
-	}
+		const history = localStorage?.getItem("dApps");
+		const previousDapps = history ? JSON.parse(history as string) : {};
+		const newHistory = { [dApp.dappId]: dApp, ...previousDapps, };
+		localStorage.setItem("dApps", JSON.stringify(newHistory));
+	}, [dApp]);
 
 	const onClaimButtonClick = () => {
 		window.gtag("event", "claim-app", {
@@ -792,19 +789,18 @@ export async function getServerSideProps({ query, req, res }) {
 
 	const dApp = response[0];
 
-	const history = JSON.parse(req.cookies.dApps ?? "{}");
-	const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
+	// const history = JSON.parse(req.cookies.dApps ?? "{}");
+	// const updatedHistory = Object.assign({}, history, { [dApp.dappId]: dApp });
 
-	const cookieValue = JSON.stringify(updatedHistory);
-	const encodedCookieValue = encodeURIComponent(cookieValue);
-	res.setHeader("Set-Cookie", `dApps=${encodedCookieValue}`);
+	// const cookieValue = JSON.stringify(updatedHistory);
+	// const encodedCookieValue = encodeURIComponent(cookieValue);
+	// res.setHeader("Set-Cookie", `dApps=${encodedCookieValue}`);
 
 	// res.setHeader("Set-Cookie", `dApps=${JSON.stringify(updatedHistory)}`);
 
 	return {
 		props: {
 			dApp,
-			history: updatedHistory,
 		},
 	};
 }
