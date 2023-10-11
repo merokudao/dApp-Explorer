@@ -6,6 +6,7 @@ import { Dapp } from "../features/dapp/models/dapp";
 import { spaceMono } from "../theme";
 import { Button, Card, RImage as Image, Text } from "./index";
 import { Column, Row } from "./layout/flex";
+import { convertUrl } from "../utils";
 
 //tags on top of app card
 export function Tag(props: { children: ReactNode }) {
@@ -34,7 +35,7 @@ export function AppList(props) {
 								{/* <Link href={}> */}
 								<Row className="justify-between">
 									<Image
-										src={app.images.logo}
+										src={convertUrl(app.images.logo)}
 										width={64}
 										height={64}
 										className="rounded-lg"

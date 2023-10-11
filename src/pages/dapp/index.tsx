@@ -30,6 +30,7 @@ import { AppStrings } from "../constants";
 import { NextSeo } from "next-seo";
 import { fetchAppById } from "../../fetch/fetchAppById";
 import Head from "next/head";
+import { convertUrl } from "../../utils";
 
 // dapp page, shows complete dapp info
 const modalStyles = {
@@ -682,7 +683,7 @@ function DappList({ dApp, history }) {
                                           33vw"
 									style={{ aspectRatio: 1 }}
 									fill={true}
-									src={dApp.images.logo}
+									src={convertUrl(dApp.images.logo)}
 									className="rounded-lg w-[64px] lg:w-[64px] "
 									alt=""
 									unoptimized={true}
