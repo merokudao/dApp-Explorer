@@ -38,8 +38,14 @@ export function FeaturedCard(props) {
 				<Image fill src={convertUrl(app.images.logo)} alt="" />
 			</div>
 			<div className="absolute bottom-[24px] left-[24px]">
-				<p className="text-[16px] leading-[18px] lg:text-[24px] lg:leading-[28px] font-[500] line-clamp-1 mb-[8px] text-light-color">
+				<p className="text-[16px] leading-[18px] lg:text-[24px] lg:leading-[28px] font-[500] line-clamp-1 mb-[8px] text-light-color inline-flex gap-1.5 items-center">
 					{app.name}
+					{app?.verification && app?.verification?.icon && <Image
+                    height={30}
+                    width={30}
+                    src={app?.verification?.icon}
+					alt="icon"
+                  />}
 				</p>
 				<Row className="gap-x-[4px]">
 					{app.tags?.length ? (
