@@ -76,12 +76,12 @@ const Index = ({ categoryList, featuredList }) => {
 export default Index;
 
 export async function getStaticProps() {
-//   const categories = await fetchCategories();
+  const categories = await fetchCategories();
   const featured = await fetchFeatured();
 
   return {
     props: {
-      categoryList: [],
+      categoryList: categories,
       featuredList: featured,
     },
     revalidate: 86400, // revalidate once every day
