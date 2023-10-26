@@ -10,8 +10,9 @@ export async function fetchFeatured() {
 	});
 	const data = await res.json();
 
+	const featuredkey = process.env.NEXT_FEATURED_APP_KEY
 	const merokuFeaturedExplorer = data.find(
-		(item) => item.key === "meroku-explorer-featured"
+		(item) => item.key === featuredkey
 	);
 
 	const appIds = merokuFeaturedExplorer ? merokuFeaturedExplorer.dappIds : [];
