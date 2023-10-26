@@ -1,12 +1,9 @@
 import { AppList, PageLayout } from "@/components";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getApp } from "../../features/app/app_slice";
 import { AppStrings } from "../constants";
 import { Dapp } from "../../features/dapp/models/dapp";
 //This class fetches browsing history from local storage
 export default function HistoryPage(props) {
-	const app = useSelector(getApp);
 	const [history, setHistory] = useState({});
 
 	useEffect(() => {
