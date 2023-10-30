@@ -759,9 +759,12 @@ function DappList({ dApp, history }) {
           />
           <Divider />
           {dApp?.verification && (
+            <>
             <VerificationDetails verification={dApp?.verification} />
+            <Divider />
+            </>
           )}
-          <Divider />
+          
           {dApp.images.screenshots?.length && (
             <>
               <DappDetailSection title={AppStrings.gallery}>
