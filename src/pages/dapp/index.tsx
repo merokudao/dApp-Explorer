@@ -566,6 +566,9 @@ function DappList({ dApp, history }) {
   useEffect(() => {
     const history = localStorage?.getItem("dApps");
     const previousDapps = history ? JSON.parse(history as string) : {};
+    if(previousDapps.hasOwnProperty(dApp.dappId)) {
+      previousDapps[dApp.dappId] = dApp;
+    };
     const newHistory = { [dApp.dappId]: dApp, ...previousDapps };
     localStorage.setItem("dApps", JSON.stringify(newHistory));
   }, [dApp]);
@@ -582,12 +585,12 @@ function DappList({ dApp, history }) {
   };
 
   const handleVerificationClick = () => {
-	const verificationSection = document.getElementById("verification-section");
-	if(verificationSection) {
-		verificationSection.style.scrollMargin = '100px'
-		verificationSection.scrollIntoView({ behavior: "smooth" });
-	}
-  }
+    const verificationSection = document.getElementById("verification-section");
+    if (verificationSection) {
+      verificationSection.style.scrollMargin = "100px";
+      verificationSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <PageLayout>
@@ -678,13 +681,15 @@ function DappList({ dApp, history }) {
                 </p>
                 <p className="text-[16px] leading-[20px] md:text-[32px] md:leading-[38px] font-[600] line-clamp-1 inline-flex gap-1.5 items-center">
                   {dApp.name}
-                  {dApp?.verification && dApp?.verification?.icon && <Image
-                    className="cursor-pointer"
-                    height={30}
-                    width={30}
-                    src={dApp?.verification?.icon}
-					          onClick={handleVerificationClick}
-                  />}
+                  {dApp?.verification && dApp?.verification?.icon && (
+                    <Image
+                      className="cursor-pointer"
+                      height={30}
+                      width={30}
+                      src={dApp?.verification?.icon}
+                      onClick={handleVerificationClick}
+                    />
+                  )}
                 </p>
               </div>
             </div>
@@ -753,8 +758,13 @@ function DappList({ dApp, history }) {
             onCreateReivew={() => setIsReviewModalOpen(true)}
           />
           <Divider />
-          {dApp?.verification && <VerificationDetails verification={dApp?.verification} />}
-          <Divider />
+          {dApp?.verification && (
+            <>
+            <VerificationDetails verification={dApp?.verification} />
+            <Divider />
+            </>
+          )}
+          
           {dApp.images.screenshots?.length && (
             <>
               <DappDetailSection title={AppStrings.gallery}>
