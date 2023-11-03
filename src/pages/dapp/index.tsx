@@ -514,6 +514,9 @@ function DappList({ dApp, history }) {
   const { address } = useAccount();
   const { query } = useRouter();
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const screenShots = isMobile ? (dApp?.images?.mobileScreenshots || dApp?.images?.screenshots) : (dApp?.images?.screenshots || dApp?.images?.mobileScreenshots)
+
   useEffect(() => {
     if (isClaimOpen) {
       document.body.style.overflow = "hidden";
@@ -591,6 +594,20 @@ function DappList({ dApp, history }) {
       verificationSection.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 1080;
+    setIsMobile(isMobile);
+
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 1080;
+      setIsMobile(isMobile);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <PageLayout>
@@ -765,11 +782,11 @@ function DappList({ dApp, history }) {
             </>
           )}
           
-          {dApp.images.screenshots?.length && (
+          {screenShots?.length && (
             <>
               <DappDetailSection title={AppStrings.gallery}>
                 <div className="grid grid-cols-3 gap-4">
-                  {dApp.images.screenshots?.map((e, idx) => (
+                  {screenShots?.map((e, idx) => (
                     <img key={idx} src={e || ""} alt="DApp Screenshot" />
                   ))}
                 </div>
