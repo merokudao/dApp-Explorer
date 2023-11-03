@@ -515,6 +515,7 @@ function DappList({ dApp, history }) {
   const { query } = useRouter();
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(false);
+  const screenShots = isMobile ? (dApp?.images?.mobileScreenshots || dApp?.images?.screenshots) : (dApp?.images?.screenshots || dApp?.images?.mobileScreenshots)
 
   useEffect(() => {
     if (isClaimOpen) {
@@ -781,22 +782,11 @@ function DappList({ dApp, history }) {
             </>
           )}
           
-          {!isMobile ? dApp.images.screenshots?.length && (
+          {screenShots?.length && (
             <>
               <DappDetailSection title={AppStrings.gallery}>
                 <div className="grid grid-cols-3 gap-4">
-                  {dApp.images.screenshots?.map((e, idx) => (
-                    <img key={idx} src={e || ""} alt="DApp Screenshot" />
-                  ))}
-                </div>
-              </DappDetailSection>
-              <Divider />
-            </>
-          ) : dApp.images.mobileScreenshots?.length && (
-            <>
-              <DappDetailSection title={AppStrings.gallery}>
-                <div className="grid grid-cols-3 gap-4">
-                  {dApp.images.mobileScreenshots?.map((e, idx) => (
+                  {screenShots?.map((e, idx) => (
                     <img key={idx} src={e || ""} alt="DApp Screenshot" />
                   ))}
                 </div>
