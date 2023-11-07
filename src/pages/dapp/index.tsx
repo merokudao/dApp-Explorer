@@ -723,7 +723,7 @@ function DappList({ dApp, history }) {
                 target="_blank"
                 href={viewLink}
               >
-                <div className="text-[12px] leading-[16px] lg:text-[14px] font-[500]">
+                <div className="text-[12px] whitespace-nowrap leading-[16px] lg:text-[14px] font-[500]">
                   {AppStrings.visitDapp}
                 </div>
                 <svg
