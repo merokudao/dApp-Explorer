@@ -703,7 +703,7 @@ function DappList({ dApp, history }) {
                     title={dApp.name}
                     className="inline-flex gap-1.5 text-[16px] leading-[20px] md:text-[24px] md:leading-[28px] font-[600]"
                   >
-                    {dApp.name}tesing
+                    {dApp.name}
                     {dApp?.verification?.icon && <Image
                       className="cursor-pointer"
                       height={30}
