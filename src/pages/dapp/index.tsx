@@ -514,6 +514,11 @@ function DappList({ dApp, history }) {
   const { address } = useAccount();
   const { query } = useRouter();
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const screenShots = isMobile
+    ? dApp?.images?.mobileScreenshots || dApp?.images?.screenshots
+    : dApp?.images?.screenshots || dApp?.images?.mobileScreenshots;
+
   useEffect(() => {
     if (isClaimOpen) {
       document.body.style.overflow = "hidden";
@@ -566,9 +571,9 @@ function DappList({ dApp, history }) {
   useEffect(() => {
     const history = localStorage?.getItem("dApps");
     const previousDapps = history ? JSON.parse(history as string) : {};
-    if(previousDapps.hasOwnProperty(dApp.dappId)) {
+    if (previousDapps.hasOwnProperty(dApp.dappId)) {
       previousDapps[dApp.dappId] = dApp;
-    };
+    }
     const newHistory = { [dApp.dappId]: dApp, ...previousDapps };
     localStorage.setItem("dApps", JSON.stringify(newHistory));
   }, [dApp]);
@@ -591,6 +596,20 @@ function DappList({ dApp, history }) {
       verificationSection.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 1080;
+    setIsMobile(isMobile);
+
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 1080;
+      setIsMobile(isMobile);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <PageLayout>
@@ -679,28 +698,32 @@ function DappList({ dApp, history }) {
                 <p className="text-[12px] leading-[16px] md:text-[16px] md:leading-[20px] uppercase my-2">
                   {dApp.category}
                 </p>
-                <p className="text-[16px] leading-[20px] md:text-[32px] md:leading-[38px] font-[600] line-clamp-1 inline-flex gap-1.5 items-center">
-                  {dApp.name}
-                  {dApp?.verification && dApp?.verification?.icon && (
-                    <Image
+                <div className="inline-flex gap-1.5 items-center">
+                  <p
+                    title={dApp.name}
+                    className="inline-flex gap-1.5 text-[16px] leading-[20px] md:text-[24px] md:leading-[28px] font-[600]"
+                  >
+                    {dApp.name}
+                    {dApp?.verification?.icon && <Image
                       className="cursor-pointer"
                       height={30}
                       width={30}
                       src={dApp?.verification?.icon}
                       onClick={handleVerificationClick}
-                    />
-                  )}
-                </p>
+                    />}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="flex-initial flex">
               <Button
                 as="a"
-                className="flex flex-grow"
+                className="flex flex-grow w-[120px]"
+                style={{ paddingLeft: "1rem", paddingRight: "1rem" }}
                 target="_blank"
                 href={viewLink}
               >
-                <div className="text-[12px] leading-[16px] lg:text-[14px] font-[500]">
+                <div className="text-[12px] whitespace-nowrap leading-[16px] lg:text-[14px] font-[500]">
                   {AppStrings.visitDapp}
                 </div>
                 <svg
@@ -760,16 +783,16 @@ function DappList({ dApp, history }) {
           <Divider />
           {dApp?.verification && (
             <>
-            <VerificationDetails verification={dApp?.verification} />
-            <Divider />
+              <VerificationDetails verification={dApp?.verification} />
+              <Divider />
             </>
           )}
-          
-          {dApp.images.screenshots?.length && (
+
+          {screenShots?.length && (
             <>
               <DappDetailSection title={AppStrings.gallery}>
                 <div className="grid grid-cols-3 gap-4">
-                  {dApp.images.screenshots?.map((e, idx) => (
+                  {screenShots?.map((e, idx) => (
                     <img key={idx} src={e || ""} alt="DApp Screenshot" />
                   ))}
                 </div>
