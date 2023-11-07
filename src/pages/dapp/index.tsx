@@ -515,7 +515,9 @@ function DappList({ dApp, history }) {
   const { query } = useRouter();
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(false);
-  const screenShots = isMobile ? (dApp?.images?.mobileScreenshots || dApp?.images?.screenshots) : (dApp?.images?.screenshots || dApp?.images?.mobileScreenshots)
+  const screenShots = isMobile
+    ? dApp?.images?.mobileScreenshots || dApp?.images?.screenshots
+    : dApp?.images?.screenshots || dApp?.images?.mobileScreenshots;
 
   useEffect(() => {
     if (isClaimOpen) {
@@ -569,9 +571,9 @@ function DappList({ dApp, history }) {
   useEffect(() => {
     const history = localStorage?.getItem("dApps");
     const previousDapps = history ? JSON.parse(history as string) : {};
-    if(previousDapps.hasOwnProperty(dApp.dappId)) {
+    if (previousDapps.hasOwnProperty(dApp.dappId)) {
       previousDapps[dApp.dappId] = dApp;
-    };
+    }
     const newHistory = { [dApp.dappId]: dApp, ...previousDapps };
     localStorage.setItem("dApps", JSON.stringify(newHistory));
   }, [dApp]);
@@ -696,24 +698,28 @@ function DappList({ dApp, history }) {
                 <p className="text-[12px] leading-[16px] md:text-[16px] md:leading-[20px] uppercase my-2">
                   {dApp.category}
                 </p>
-                <p className="text-[16px] leading-[20px] md:text-[32px] md:leading-[38px] font-[600] line-clamp-1 inline-flex gap-1.5 items-center">
-                  {dApp.name}
-                  {dApp?.verification && dApp?.verification?.icon && (
-                    <Image
+                <div className="inline-flex gap-1.5 items-center">
+                  <p
+                    title={dApp.name}
+                    className="inline-flex gap-1.5 text-[16px] leading-[20px] md:text-[24px] md:leading-[28px] font-[600]"
+                  >
+                    {dApp.name}
+                    {dApp?.verification?.icon && <Image
                       className="cursor-pointer"
                       height={30}
                       width={30}
                       src={dApp?.verification?.icon}
                       onClick={handleVerificationClick}
-                    />
-                  )}
-                </p>
+                    />}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="flex-initial flex">
               <Button
                 as="a"
-                className="flex flex-grow"
+                className="flex flex-grow w-[120px]"
+                style={{ paddingLeft: "1rem", paddingRight: "1rem" }}
                 target="_blank"
                 href={viewLink}
               >
@@ -777,11 +783,11 @@ function DappList({ dApp, history }) {
           <Divider />
           {dApp?.verification && (
             <>
-            <VerificationDetails verification={dApp?.verification} />
-            <Divider />
+              <VerificationDetails verification={dApp?.verification} />
+              <Divider />
             </>
           )}
-          
+
           {screenShots?.length && (
             <>
               <DappDetailSection title={AppStrings.gallery}>
