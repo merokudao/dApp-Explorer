@@ -516,8 +516,6 @@ function DappList({ dApp, history }) {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  console.log(dApp.images, "images");
-
   const mobileScreenshots = dApp?.images?.mobileScreenshots
     ? dApp?.images?.mobileScreenshots
     : [];
