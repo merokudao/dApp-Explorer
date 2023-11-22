@@ -543,8 +543,6 @@ function DappList({ dApp, history }) {
     return [];
   })() as string[];
 
-  console.log(screenShots, "screenshots");
-
   useEffect(() => {
     if (isClaimOpen) {
       document.body.style.overflow = "hidden";
