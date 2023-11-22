@@ -515,9 +515,35 @@ function DappList({ dApp, history }) {
   const { query } = useRouter();
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(false);
-  const screenShots = isMobile
-    ? dApp?.images?.mobileScreenshots || dApp?.images?.screenshots
-    : dApp?.images?.screenshots || dApp?.images?.mobileScreenshots;
+
+  console.log(dApp.images, "images");
+
+  const mobileScreenshots = dApp?.images?.mobileScreenshots
+    ? dApp?.images?.mobileScreenshots
+    : [];
+  const desktopScreenshots = dApp?.images?.screenshots
+    ? dApp?.images?.screenshots
+    : [];
+
+  const screenShots: string[] = (() => {
+    if (isMobile) {
+      if (mobileScreenshots.length > 0) {
+        return mobileScreenshots;
+      } else if (desktopScreenshots.length > 0) {
+        return desktopScreenshots;
+      }
+    } else {
+      if (desktopScreenshots.length > 0) {
+        return desktopScreenshots;
+      } else if (mobileScreenshots.length > 0) {
+        return mobileScreenshots;
+      }
+    }
+
+    return [];
+  })() as string[];
+
+  console.log(screenShots, "screenshots");
 
   useEffect(() => {
     if (isClaimOpen) {
@@ -704,13 +730,15 @@ function DappList({ dApp, history }) {
                     className="inline-flex gap-1.5 text-[16px] leading-[20px] md:text-[24px] md:leading-[28px] font-[600]"
                   >
                     {dApp.name}
-                    {dApp?.verification?.icon && <Image
-                      className="cursor-pointer"
-                      height={30}
-                      width={30}
-                      src={dApp?.verification?.icon}
-                      onClick={handleVerificationClick}
-                    />}
+                    {dApp?.verification?.icon && (
+                      <Image
+                        className="cursor-pointer"
+                        height={30}
+                        width={30}
+                        src={dApp?.verification?.icon}
+                        onClick={handleVerificationClick}
+                      />
+                    )}
                   </p>
                 </div>
               </div>
@@ -788,7 +816,7 @@ function DappList({ dApp, history }) {
             </>
           )}
 
-          {screenShots?.length && (
+          {screenShots.length > 0 ? (
             <>
               <DappDetailSection title={AppStrings.gallery}>
                 <div className="grid grid-cols-3 gap-4">
@@ -799,7 +827,7 @@ function DappList({ dApp, history }) {
               </DappDetailSection>
               <Divider />
             </>
-          )}
+          ) : null}
           <DappDetailSection>
             <ClaimDappSection
               // address={address}
