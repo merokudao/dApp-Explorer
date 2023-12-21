@@ -32,6 +32,7 @@ import { fetchAppById } from "../../fetch/fetchAppById";
 import Head from "next/head";
 import { convertUrl } from "../../utils";
 import VerificationDetails from "../../components/VerificationDetails";
+import { signMessage } from '@wagmi/core'
 
 // dapp page, shows complete dapp info
 const modalStyles = {
@@ -239,7 +240,7 @@ export function StarRating(props) {
             onClick={editable ? () => setRating(idx) : undefined}
             onMouseEnter={editable ? () => setHover(idx) : undefined}
             onMouseLeave={editable ? () => setRating(rating) : undefined}
-            className={`icon ${
+            className={`icon cursor-pointer ${
               idx <= (rating || hover) ? "icon-filled" : null
             }`}
             width="24"
@@ -270,31 +271,35 @@ function ReviewDialog(props) {
     dappId: props.dappId,
     userAddress: address,
   } as Review);
-  const onSubmit = (evt) => {
-    console.log(result.isUpdating);
 
-    postReview({ ...review, rating: review.rating ?? 0 })
-      .unwrap()
-      .then((_) => {
-        props.onRequestClose();
-        router.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        setErrors(err);
-      });
-    console.log(result.isUpdating);
+  const onSubmit = async (evt) => {
+    try {
+      const sign = await signMessage({ message: 'Please sign to give rating.' })
+      postReview({ ...review, rating: review.rating ?? 0, signature: sign, message: 'Please sign to give rating.' })
+        .unwrap()
+        .then((_) => {
+          props.onRequestClose();
+          router.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrors(err);
+        });
+    } catch(err) {
+      setErrors(err?.message)
+      console.log('error sign', err?.message)
+    }
   };
 
   if (errors) {
     return (
-      <Column height="25" className={"gap-y-[40px] relative"}>
+      <Column height="25" className={"p-4 gap-y-[20px] relative bg-light-color"}>
         <h1 className="text-[20px] leading-[24px] font-[500]">
           Failed to add review
         </h1>
         <button
           onClick={() => props.onRequestClose()}
-          className="absolute right-0 "
+          className="absolute right-2 "
         >
           <svg
             width="24"
@@ -313,7 +318,8 @@ function ReviewDialog(props) {
           </svg>
         </button>
         <Column>
-          Have you opened or downloaded dapp before posting review?
+          <p>You have not open or download dapp before posting review.</p>
+          <p>Please open or download dapp first.</p>
         </Column>
       </Column>
     );
@@ -328,7 +334,7 @@ function ReviewDialog(props) {
         <h1 className="text-xl leading-md font-[500]">Add Review</h1>
         <button
           onClick={() => props.onRequestClose()}
-          className="absolute right-0 "
+          className="absolute right-3 "
         >
           <svg
             width="24"
@@ -459,13 +465,13 @@ function AppRatingList(props) {
           </Link>
         </Row>
       )}
-      <div className="absolute inset-0">
+      {/* <div className="absolute inset-0">
         <div className="backdrop-filter backdrop-blur-sm absolute w-full h-full flex items-center justify-center ">
           <p className="font-medium text-xs md:text-base flex ml-4 text-blue-700">
             ratings & reviews coming soon!
           </p>
         </div>
-      </div>
+      </div> */}
       <Divider />
     </div>
   );
@@ -542,7 +548,7 @@ function DappList({ dApp, history }) {
   })() as string[];
 
   useEffect(() => {
-    if (isClaimOpen) {
+    if (isClaimOpen || isReviewModalOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -584,7 +590,7 @@ function DappList({ dApp, history }) {
     args.set("userAddress", address);
     viewLink = `${BASE_URL}/o/view/${
       dApp.dappId
-    }?userId=known_meroku_explorer?${args.toString()}`;
+    }?${args.toString()}`;
     downloadLink = `${BASE_URL}/o/download/${dApp.dappId}?${args.toString()}`;
   } else {
     viewLink = `${BASE_URL}/o/view/${dApp.dappId}?userId=anonymous_meroku_explorer`;
@@ -840,6 +846,7 @@ function DappList({ dApp, history }) {
           isOpen={isReviewModalOpen}
           style={reviewModalStyle}
           onRequestClose={() => setIsReviewModalOpen(false)}
+          preventScroll={true}
         >
           <ReviewDialog
             dappId={dApp.dappId}

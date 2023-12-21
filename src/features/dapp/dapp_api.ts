@@ -222,6 +222,8 @@ export class DappDataSource implements IDappDataSource {
 					url: `${ApiEndpoints.RATING}`,
 					headers: {
 						apiKey: MEROKU_API_KEY,
+						'x-message': body?.message,
+						'x-signature': body?.signature 
 					},
 					method: "POST",
 					body: body,
