@@ -265,7 +265,7 @@ export function StarRating(props) {
 function ReviewDialog(props) {
   const [postReview, result, isLoading, isFetching] = usePostReviewMutation();
   const router = useRouter();
-  const [errors, setErrors] = useState();
+  const [errors, setErrors] = useState<unknown>();
   const { address } = useAccount();
   const [review, setReview] = useState<Review>({
     dappId: props.dappId,
@@ -286,8 +286,8 @@ function ReviewDialog(props) {
           setErrors(err);
         });
     } catch(err) {
-      setErrors(err?.message)
-      console.log('error sign', err?.message)
+      setErrors(err)
+      console.log('error sign', err)
     }
   };
 
