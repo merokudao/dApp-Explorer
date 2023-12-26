@@ -32,7 +32,18 @@ import { fetchAppById } from "../../fetch/fetchAppById";
 import Head from "next/head";
 import { convertUrl } from "../../utils";
 import VerificationDetails from "../../components/VerificationDetails";
-import { signMessage } from '@wagmi/core'
+import { signTypedData } from "@wagmi/core";
+
+// The named list of all type definitions
+const types = {
+  Dapp: [
+    { name: "Wallet", type: "address" },
+    { name: "DappId", type: "string" },
+    { name: "Rating", type: "string" },
+    { name: "Review", type: "string" },
+    { name: "Time", type: "string" },
+  ],
+};
 
 // dapp page, shows complete dapp info
 const modalStyles = {
@@ -228,20 +239,28 @@ export function StarRating(props) {
       onChange(rating);
     }
   }, [rating]);
+
+  const handleChangeRating = (ratings: number) => {
+    setHover(0);
+    setRating(ratings);
+  };
+
   return (
     <Row
       className="gap-x-[4px]"
-      onMouseLeave={editable ? () => setRating(rating) : undefined}
+      onMouseLeave={editable ? () => handleChangeRating(rating) : undefined}
     >
       {[...Array(5)].map((_, idx) => {
         idx += 1;
         return (
           <svg
-            onClick={editable ? () => setRating(idx) : undefined}
+            onClick={editable ? () => handleChangeRating(idx) : undefined}
             onMouseEnter={editable ? () => setHover(idx) : undefined}
-            onMouseLeave={editable ? () => setRating(rating) : undefined}
+            onMouseLeave={
+              editable ? () => handleChangeRating(rating) : undefined
+            }
             className={`icon cursor-pointer ${
-              idx <= (rating || hover) ? "icon-filled" : null
+              idx <= (hover || rating) ? "icon-filled" : null
             }`}
             width="24"
             height="25"
@@ -273,9 +292,27 @@ function ReviewDialog(props) {
   } as Review);
 
   const onSubmit = async (evt) => {
+    const message = {
+      Wallet: address,
+      DappId: props.dappId,
+      Rating: review?.rating ? `${review.rating}` : `0`,
+      Review: review?.comment ?? "None",
+      Time: new Date().toString(),
+    };
+
     try {
-      const sign = await signMessage({ message: 'Please sign to give rating.' })
-      postReview({ ...review, rating: review.rating ?? 0, signature: sign, message: 'Please sign to give rating.' })
+      const sign = await signTypedData({
+        domain: {},
+        message,
+        primaryType: "Dapp",
+        types,
+      });
+      postReview({
+        ...review,
+        rating: review.rating ?? 0,
+        signature: sign,
+        message: JSON.stringify(message),
+      })
         .unwrap()
         .then((_) => {
           props.onRequestClose();
@@ -285,15 +322,18 @@ function ReviewDialog(props) {
           console.log(err);
           setErrors(err);
         });
-    } catch(err) {
-      setErrors(err)
-      console.log('error sign', err)
+    } catch (err) {
+      setErrors(err);
+      console.log("error sign", err);
     }
   };
 
   if (errors) {
     return (
-      <Column height="25" className={"p-4 gap-y-[20px] relative bg-light-color"}>
+      <Column
+        height="25"
+        className={"p-4 gap-y-[20px] relative bg-light-color"}
+      >
         <h1 className="text-[20px] leading-[24px] font-[500]">
           Failed to add review
         </h1>
@@ -588,9 +628,7 @@ function DappList({ dApp, history }) {
 
   if (address) {
     args.set("userAddress", address);
-    viewLink = `${BASE_URL}/o/view/${
-      dApp.dappId
-    }?${args.toString()}`;
+    viewLink = `${BASE_URL}/o/view/${dApp.dappId}?${args.toString()}`;
     downloadLink = `${BASE_URL}/o/download/${dApp.dappId}?${args.toString()}`;
   } else {
     viewLink = `${BASE_URL}/o/view/${dApp.dappId}?userId=anonymous_meroku_explorer`;
