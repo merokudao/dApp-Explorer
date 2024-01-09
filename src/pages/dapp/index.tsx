@@ -358,7 +358,7 @@ function ReviewDialog(props) {
           </svg>
         </button>
         <Column>
-          <p>You have not open or download dapp before posting review.</p>
+          <p>You have not opened or downloaded Dapp before posting a review.</p>
           <p>Please open or download dapp first.</p>
         </Column>
       </Column>
@@ -505,13 +505,6 @@ function AppRatingList(props) {
           </Link>
         </Row>
       )}
-      {/* <div className="absolute inset-0">
-        <div className="backdrop-filter backdrop-blur-sm absolute w-full h-full flex items-center justify-center ">
-          <p className="font-medium text-xs md:text-base flex ml-4 text-blue-700">
-            ratings & reviews coming soon!
-          </p>
-        </div>
-      </div> */}
       <Divider />
     </div>
   );
