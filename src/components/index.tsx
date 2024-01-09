@@ -47,7 +47,7 @@ function ExpandAbleText(props) {
 	);
 }
 
-function Button(props) {
+function Button(props, textCenter) {
 	const Elm = props.as || "button";
 	return (
 		<Elm
@@ -58,7 +58,7 @@ function Button(props) {
 				props.className
 			}
 		>
-			<div className="text-xs font-[500] leading-md flex items-center justify-center text-light-color">
+			<div className={`text-xs font-[500] leading-md flex items-center justify-center text-light-color ${textCenter ? 'm-auto' : ''}`}>
 				{" "}
 				{props.children}
 			</div>
